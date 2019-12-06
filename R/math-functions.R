@@ -122,156 +122,156 @@ Decor.pField <- function(field, lat1, lon1, lat2, lon2,
                          return.scatter = FALSE,
                          verbose = FALSE, print.progress = NULL, ...) {
 
-    # Aux function
-    LastNonNA <- function(x) {
-        i <- which(!is.na(x))
-        ifelse(length(i) == 0, NA, x[max(which(!is.na(x)))])
-    }
+  # Aux function
+  LastNonNA <- function(x) {
+    i <- which(!is.na(x))
+    ifelse(length(i) == 0, NA, x[max(which(!is.na(x)))])
+  }
 
-    # Input error checking and selection of target location
+  # Input error checking and selection of target location
+  
+  args <- c(missing(lat1), missing(lon1))
+
+  if (sum(args) == 1) {
     
-    args <- c(missing(lat1), missing(lon1))
-
-    if (sum(args) == 1) {
-        
-        stop("Specify both 'lat1' and 'lon1' to select a target point
+    stop("Specify both 'lat1' and 'lon1' to select a target point
               or region, or none to analyse the entire field.")
-        
-    } else if (sum(args) == 0) {
+    
+  } else if (sum(args) == 0) {
 
-        args2 <- c(missing(lat2), missing(lon2))
+    args2 <- c(missing(lat2), missing(lon2))
 
-        if (sum(args2) == 2) {
+    if (sum(args2) == 2) {
 
-            if (verbose) message("Selecting target point...")
-            sfield <- SelPoint(field, lat1, lon1,
-                               simplify = FALSE, verbose = verbose)
+      if (verbose) message("Selecting target point...")
+      sfield <- SelPoint(field, lat1, lon1,
+                         simplify = FALSE, verbose = verbose)
 
-        } else if (sum(args2) == 1) {
+    } else if (sum(args2) == 1) {
 
-            stop("Specify both 'lat2' and 'lon2'
+      stop("Specify both 'lat2' and 'lon2'
                   if you want to select a target region.")
 
-        } else {
+    } else {
 
-            stop("Method to select region not yet implemented!")
-            sfield <- selspace(field, lat1 = lat1, lat2 = lat2,
-                               lon1 = lon1, lon2 = lon2)
+      stop("Method to select region not yet implemented!")
+      sfield <- selspace(field, lat1 = lat1, lat2 = lat2,
+                         lon1 = lon1, lon2 = lon2)
 
-        }
+    }
+
+  } else {
+
+    if (verbose) message("Using entire field...")
+    sfield <- field
+  }
+
+  # Coordinate fields of input and selected target in pField structure
+  
+  latlon.field <-  GetLatLonField(field, simplify = TRUE)
+  latlon.sfield <- GetLatLonField(sfield, simplify = TRUE)
+
+  # Calculate decorrelation lengths
+
+  tau <- rep(NA, ncol(sfield))
+  if (return.scatter) scatter <- list()
+
+  tau.start <- 1000
+
+  for (i in 1 : ncol(sfield)) {
+
+    if (!is.null(print.progress)) {
+      if ((i %% print.progress) == 0) {
+        message(sprintf("Analysing site no %i of %i.", i, ncol(sfield)))
+      }
+    }
+
+    # calculate distance field for site i
+    lat <- latlon.sfield[1, i]
+    lon <- latlon.sfield[2, i]
+    d <- GetDistanceField(field, latlon.field = latlon.field,
+                          lat = lat, lon = lon, verbose = verbose)
+
+    # calculate correlation field for site i
+    corr <- cor.pTs(sfield[, i], field, ...)
+
+    if (all(is.na(corr))) {
+
+      # no non-missing correlations = no estimate possible
+      if (verbose) {
+        message(sprintf("Site %i: All field correlations are NA.", i))
+      }
 
     } else {
 
-        if (verbose) message("Using entire field...")
-        sfield <- field
-    }
+      # fit exponential decay model; catch errors
 
-    # Coordinate fields of input and selected target in pField structure
-    
-    latlon.field <-  GetLatLonField(field, simplify = TRUE)
-    latlon.sfield <- GetLatLonField(sfield, simplify = TRUE)
+      # start parameter = last found value, or 1000 km
+      tau.start <- LastNonNA(tau[1 : i])
+      if (is.na(tau.start)) tau.start <- 1000
 
-    # Calculate decorrelation lengths
+      tau[i] <- tryCatch(
+      {
+        # decorrelation length when no error...
 
-    tau <- rep(NA, ncol(sfield))
-    if (return.scatter) scatter <- list()
+        mod <- nls(y ~ exp(-x / tau),
+                   data = data.frame(x = d, y = c(corr)),
+                   start = list(tau = tau.start),
+                   control = nls.control(maxiter = 100))
 
-    tau.start <- 1000
+        mod.sum <- summary(mod)
+        if (verbose) print(mod.sum)
 
-    for (i in 1 : ncol(sfield)) {
+        # ... but only when successful convergence and p < 0.1
 
-        if (!is.null(print.progress)) {
-            if ((i %% print.progress) == 0) {
-                message(sprintf("Analysing site no %i of %i.", i, ncol(sfield)))
-            }
-        }
+        if (mod$convInfo$isConv & mod.sum$parameters[1, 4] <= 0.1) {
 
-        # calculate distance field for site i
-        lat <- latlon.sfield[1, i]
-        lon <- latlon.sfield[2, i]
-        d <- GetDistanceField(field, latlon.field = latlon.field,
-                              lat = lat, lon = lon, verbose = verbose)
-
-        # calculate correlation field for site i
-        corr <- cor.pTs(sfield[, i], field, ...)
-
-        if (all(is.na(corr))) {
-
-            # no non-missing correlations = no estimate possible
-            if (verbose) {
-                message(sprintf("Site %i: All field correlations are NA.", i))
-            }
+          dcr.len <- mod.sum$parameters[1, 1]
 
         } else {
 
-            # fit exponential decay model; catch errors
-
-            # start parameter = last found value, or 1000 km
-            tau.start <- LastNonNA(tau[1 : i])
-            if (is.na(tau.start)) tau.start <- 1000
-
-            tau[i] <- tryCatch(
-            {
-                # decorrelation length when no error...
-
-                mod <- nls(y ~ exp(-x / tau),
-                           data = data.frame(x = d, y = c(corr)),
-                           start = list(tau = tau.start),
-                           control = nls.control(maxiter = 100))
-
-                mod.sum <- summary(mod)
-                if (verbose) print(mod.sum)
-
-                # ... but only when successful convergence and p < 0.1
-
-                if (mod$convInfo$isConv & mod.sum$parameters[1, 4] <= 0.1) {
-
-                    dcr.len <- mod.sum$parameters[1, 1]
-
-                } else {
-
-                    dcr.len <- NA
-                }
-
-                dcr.len
-            },
-            error = function(cond) {
-
-                message(conditionMessage(cond))
-                return(NA)
-            })
+          dcr.len <- NA
         }
 
-        # scatter of distances versus correlations
-        if (return.scatter) {
-            scatter[[i]] <- as.data.frame(list(d = d, cor = c(corr)))
-        }
+        dcr.len
+      },
+      error = function(cond) {
 
+        message(conditionMessage(cond))
+        return(NA)
+      })
     }
 
-    # Arrange output
-
-    if (ncol(sfield) == 1) {
-
-        decor.length <- tau
-        if (return.scatter) scatter <- scatter[[1]]
-
-    } else {
-
-        decor.length <- pField(tau, time = max(time(field)),
-                               lat = GetLat(sfield), lon = GetLon(sfield),
-                               name = "decorrelation",
-                               history = GetHistory(field), date = FALSE)
-        decor.length <- AddHistory(decor.length,
-                                   paste0("Decor.pField(", GetName(field), ")"))
-    }
-
-    res <- decor.length
+    # scatter of distances versus correlations
     if (return.scatter) {
-        res <- list(decor.length = decor.length, scatter = scatter)
+      scatter[[i]] <- as.data.frame(list(d = d, cor = c(corr)))
     }
 
-    return(res)
+  }
+
+  # Arrange output
+
+  if (ncol(sfield) == 1) {
+
+    decor.length <- tau
+    if (return.scatter) scatter <- scatter[[1]]
+
+  } else {
+
+    decor.length <- pField(tau, time = max(time(field)),
+                           lat = GetLat(sfield), lon = GetLon(sfield),
+                           name = "decorrelation",
+                           history = GetHistory(field), date = FALSE)
+    decor.length <- AddHistory(decor.length,
+                               paste0("Decor.pField(", GetName(field), ")"))
+  }
+
+  res <- decor.length
+  if (return.scatter) {
+    res <- list(decor.length = decor.length, scatter = scatter)
+  }
+
+  return(res)
 
 }
 

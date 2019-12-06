@@ -30,7 +30,7 @@
 ##' @inheritParams pTs
 ##' @return A two-dimensional array of class \code{"pField"}.
 ##' @source Function copied from "proxytype.R" in paleolibary/src/
-##' @author Thomas Laepple
+##' @author Thomas Laepple; adapated by Thomas Münch
 ##' @examples
 ##' @export
 pField <- function(data = NULL,
@@ -42,68 +42,68 @@ pField <- function(data = NULL,
                    date = TRUE,
                    kTol = 1 / 400) {
 
-    # Check input data
+  # Check input data
 
-    nobs <- length(lat) * length(lon) * length(time)
-    
-    if (length(data) <= 1) {
+  nobs <- length(lat) * length(lon) * length(time)
+  
+  if (length(data) <= 1) {
 
-        if (nobs == 0) {
-            stop(paste("Latitude, longitude or time information",
-                       "missing for creating empty field."))
-        }
-
-        if (is.null(data[1])) {
-            
-            data <- rep(NA, nobs)
-            
-        } else {
-            
-            data <- rep(data[1], nobs)
-
-        }
+    if (nobs == 0) {
+      stop(paste("Latitude, longitude or time information",
+                 "missing for creating empty field."))
     }
 
-    if (length(data) != nobs) {
-
-        stop(paste("Number of latitudes, longitudes and time points",
-                   "does not match number of elements in 'data'. If you want",
-                   "to create and empty field, supply 'data = NULL'."))
-    }
-
-    # Shape data into a 2D array
-    dim(data) <- c(length(lat) * length(lon), length(time))
-
-    if (length(time) > 1) {
-        
-        # real time series
-        if (abs(max(diff(time)) - min(diff(time))) > kTol)
-            stop("Time steps are not equidistant.")
-        
-        result <- ts(t(data), start = time[1], deltat = (time[2] - time[1]))
-
+    if (is.null(data[1])) {
+      
+      data <- rep(NA, nobs)
+      
     } else {
+      
+      data <- rep(data[1], nobs)
 
-        # only one time step exists
-        result <- ts(t(data), start = time[1])
     }
+  }
 
-    # Put attributes and classes
+  if (length(data) != nobs) {
+
+    stop(paste("Number of latitudes, longitudes and time points",
+               "does not match number of elements in 'data'. If you want",
+               "to create and empty field, supply 'data = NULL'."))
+  }
+
+  # Shape data into a 2D array
+  dim(data) <- c(length(lat) * length(lon), length(time))
+
+  if (length(time) > 1) {
     
-    attr(result, "lat") <- lat
-    attr(result, "lon") <- lon
-    attr(result, "name") <- name
+    # real time series
+    if (abs(max(diff(time)) - min(diff(time))) > kTol)
+      stop("Time steps are not equidistant.")
+    
+    result <- ts(t(data), start = time[1], deltat = (time[2] - time[1]))
 
-    if (sum(nchar(history)) == 0) {
-        attr(result, "history") <- GetHistory(data)
-    } else {
-        attr(result, "history") <- GetHistory(data)
-        result <- AddHistory(result, history, date = date)
-    }
+  } else {
 
-    attr(result, "oclass") <- class(result)
-    attr(result, "nclass") <- c("pField", "ts")
-    class(result) <- attr(result, "nclass")
+    # only one time step exists
+    result <- ts(t(data), start = time[1])
+  }
 
-    invisible(result)
+  # Put attributes and classes
+  
+  attr(result, "lat") <- lat
+  attr(result, "lon") <- lon
+  attr(result, "name") <- name
+
+  if (sum(nchar(history)) == 0) {
+    attr(result, "history") <- GetHistory(data)
+  } else {
+    attr(result, "history") <- GetHistory(data)
+    result <- AddHistory(result, history, date = date)
+  }
+
+  attr(result, "oclass") <- class(result)
+  attr(result, "nclass") <- c("pField", "ts")
+  class(result) <- attr(result, "nclass")
+
+  invisible(result)
 }
