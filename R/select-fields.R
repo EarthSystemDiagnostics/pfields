@@ -18,7 +18,8 @@
 #' @author Thomas Laepple
 #' @examples
 SelSpace3D <- function(data, lat1, lon1, SBOX = 5, tolLon = 10, 
-  bNN = FALSE, timeindexNA = 1) {
+                       bNN = FALSE, timeindexNA = 1) {
+  warning("'SelSpace3D()' is experimental and in development; use with care.")
   choice.lat <- lat1
   choice.lon <- lon1
   temp <- attributes(data)
