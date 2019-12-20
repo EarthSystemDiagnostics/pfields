@@ -260,3 +260,54 @@ is.pTs <- function(object) {
     sum(class(object) == "pTs") > 0
 }
 
+##' Convert field to data frame
+##'
+##' Convert a static \code{"pField"} object, i.e. including only one time step,
+##' to a data frame with data, latitude and longitude columns, with the
+##' possibility to cut out a specified latitude-longitude region.
+##' @param data a \code{"pField"} object with one timestep.
+##' @param lat.min set the minimum latitude for the output; per default the
+##' minimum in \code{data} is used.
+##' @param lat.max set the maximum latitude for the output; per default the
+##' maximum in \code{data} is used.
+##' @param lon.min set the minimum longitude for the output; per default the
+##' minimum in \code{data} is used.
+##' @param lon.max set the maximum longitude for the output; per default the
+##' maximum in \code{data} is used.
+##' @return A data frame with the three columns \code{lat} (latitudes),
+##'   \code{lon} (longitudes) and \code{dat} (the values of \code{data} at the
+##'   coordinate positions).
+##' @author Thomas Münch
+##' @export
+pField2df <- function(data,
+                      lat.min = NULL, lat.max = NULL,
+                      lon.min = NULL, lon.max = NULL) {
+
+    if (nrow(data) != 1)
+        stop("Method not yet suited for more than 1 timestep.")
+
+    coord.field <- GetLatLonField(data)
+
+    df <- data.frame(
+        lat = coord.field$lat2d,
+        lon = coord.field$lon2d,
+        dat = c(data[1, ]))
+
+    df$lon[df$lon > 180] <- df$lon[df$lon > 180] - 360
+
+    if (!length(lat.min)) lat.min <- min(df$lat)
+    if (!length(lat.max)) lat.max <- max(df$lat)
+    if (!length(lon.min)) lon.min <- min(df$lon)
+    if (!length(lon.max)) lon.max <- max(df$lon)
+
+    i <- which(df$lat >= lat.min & df$lat <= lat.max)
+    df <- df[i, ]
+
+    i <- which(df$lon >= lon.min & df$lon <= lon.max)
+    df <- df[i, ]
+
+    df$lon[df$lon < 0] <- df$lon[df$lon < 0] + 360
+
+    return(df)
+
+}
