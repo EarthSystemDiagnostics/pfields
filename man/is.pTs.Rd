@@ -11,10 +11,10 @@ is.pTs(object)
 }
 \value{
 \code{TRUE} or \code{FALSE} depending on whether \code{object} is a
-pTs or not.
+\code{"pTs"} object or not.
 }
 \description{
-Test for pTs object
+Check if object is a \code{"pTs"} object.
 }
 \author{
 Thomas Laepple

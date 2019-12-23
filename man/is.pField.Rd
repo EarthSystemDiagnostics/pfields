@@ -11,10 +11,10 @@ is.pField(object)
 }
 \value{
 \code{TRUE} or \code{FALSE} depending on whether \code{object} is a
-pField or not.
+\code{"pField"} or not.
 }
 \description{
-Test for pField object
+Check if object is a \code{"pField"} object.
 }
 \author{
 Thomas Laepple

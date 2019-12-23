@@ -238,11 +238,12 @@ str.pTs <- function(object, ...) {
 
 ##' pField object
 ##'
-##' Test for pField object
+##' Check if object is a \code{"pField"} object.
 ##' @param object object to be tested.
 ##' @return \code{TRUE} or \code{FALSE} depending on whether \code{object} is a
-##' pField or not.
+##' \code{"pField"} or not.
 ##' @author Thomas Laepple
+##' @export
 is.pField <- function(object) {
 
     sum(class(object) == "pField") > 0
@@ -250,11 +251,12 @@ is.pField <- function(object) {
 
 ##' pTs object
 ##'
-##' Test for pTs object
+##' Check if object is a \code{"pTs"} object.
 ##' @param object object to be tested.
 ##' @return \code{TRUE} or \code{FALSE} depending on whether \code{object} is a
-##' pTs or not.
+##' \code{"pTs"} object or not.
 ##' @author Thomas Laepple
+##' @export
 is.pTs <- function(object) {
 
     sum(class(object) == "pTs") > 0
