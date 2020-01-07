@@ -11,16 +11,18 @@ pField(data = NULL, time = 1, lat = NA, lon = NA, name = "",
   history = "", date = TRUE, kTol = 1/400)
 }
 \arguments{
-\item{data}{input data, usually a three-dimensional gridded data array. If
-\code{NULL}, or a single value, an empty data array, or a data array filled
-with the single value, is created with dimensions according to the
-information (i.e., lengths) in \code{time}, \code{lat} and \code{lon}.}
+\item{data}{input data; can be \code{NULL}, a numeric vector or an array of
+any dimension, but note the assumed order of observations (see details). If
+\code{NULL} or a single value (length-1 vector), an empty \code{"pfield"}
+object or a \code{"pfield"} object filled with the single value is created
+with dimensions according to the information (i.e., lengths) in \code{time},
+\code{lat} and \code{lon}.}
 
 \item{time}{vector of observation time points, must be equidistant.}
 
-\item{lat}{vector of latitudes.}
+\item{lat}{vector of (unique) latitudes.}
 
-\item{lon}{vector of longitudes.}
+\item{lon}{vector of (unique) longitudes.}
 
 \item{name}{character string with the name of the \code{"pField"} object to
 be generated.}
@@ -39,22 +41,30 @@ A two-dimensional array of class \code{"pField"}.
 }
 \description{
 This function takes supplied vectors of time points, latitudes and
-longitudes to convert, or create, a three-dimensional gridded data array
-into a \code{"pField"} object.
+longitudes to create an empty or convert given data into a \code{"pField"}
+object.
 }
 \details{
-For a supplied gridded data array, the function shapes the data array into a
-two-dimensional array with columns corresponding to the spatial dimension
-(latitude-longitude pair) and rows corresponding to the time points of the
-observations, i.e. similar to the structure of netcdf files. For this, the
-total number of observation points in \code{data} must match the product of
-the lengths of \code{time}, \code{lat} and \code{lon}. Each time series at
-a spatial location is converted to a time series \code{\link[stats]{ts}}
-object; and longitudes and latitudes are added to the new array as
-attributes. If no input array is supplied, an empty three-dimensional
-gridded data array is created from the information provided in \code{time},
-\code{lat} and \code{lon}, and converted in a similar manner to a 2D
-\code{"pField"} object.
+The function creates or shapes given data into a \code{"pfield"} object:
+\itemize{
+  \item The return object is a two-dimensional array of class
+    \code{"pfield"} with columns corresponding to the spatial dimension
+    (latitude-longitude pair) and rows corresponding to the time points of
+    the observations.
+  \item Each time series at a spatial location is a \code{\link[stats]{ts}}
+    object.
+  \item Longitude and latitude information are included as attributes along
+    with a history attribute for change log information.
+  \item If no input data is supplied, an empty matrix is created according
+    to the information provided in \code{time}, \code{lat} and \code{lon}.
+  \item If \code{data} is supplied of length > 1, its total number of
+    observation points must match the product of the lengths of \code{time},
+    \code{lat} and \code{lon}.
+  \item Note that the order of observations in the input data is assumed to
+    follow the typical structure of netcdf files, i.e. the observations are
+    incremented first along longitudes, then along latitudes, and finally
+    along time.
+}
 }
 \examples{
 # Create an empty pfield object covering two latitudes, three longitudes and
@@ -114,5 +124,5 @@ data <- t(data) # order of observations changes
 pf.different <- pField(data, lat = lat, lon = lon, time = time)
 }
 \author{
-Thomas Laepple; adapated by Thomas Münch
+Thomas Laepple; adapted by Thomas Münch
 }
