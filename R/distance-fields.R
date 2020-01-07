@@ -12,6 +12,12 @@
 ##' @return a two component list or 2 x n matrix.
 ##' @source Function copied from "basis.R" in paleolibary/src/.
 ##' @author Thomas Laepple
+##' @examples
+##' field <- pField(lat = seq(0, 90, 10), lon = c(-10, 0, 10))
+##'
+##' latlons <- GetLatLonField(field)
+##' latlons$lat2d
+##' latlons$lon2d
 ##' @export
 GetLatLonField <- function(data, simplify = FALSE) {
 

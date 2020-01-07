@@ -10,6 +10,9 @@
 ##' @source Function copied from "basis.R" in paleolibary/src/.
 ##' @author Thomas Laepple
 ##' @examples
+##' x <- pField(data = array(rnorm(10 * 10 * 100), dim = c(10, 10, 100)),
+##'             time = 1 : 100, lat = 1 : 10, lon = 1 : 10)
+##' ApplySpace(x, sd)
 ##' @aliases applyspace ApplySpace
 ##' @export applyspace ApplySpace
 ApplySpace <- function(data, FUN, ...) {
@@ -67,6 +70,9 @@ applyspace <- function(...) {
 ##' @source Function copied from "basis.R" in paleolibary/src/.
 ##' @author Thomas Laepple
 ##' @examples
+##' x <- pField(data = array(rnorm(10 * 10 * 100), dim = c(10, 10, 100)),
+##'             time = 1 : 100, lat = 1 : 10, lon = 1 : 10)
+##' ApplyTime(x, mean)
 ##' @aliases applytime ApplyTime
 ##' @export applytime ApplyTime
 ApplyTime <- function(data, FUN, newtime = NULL, ...) {

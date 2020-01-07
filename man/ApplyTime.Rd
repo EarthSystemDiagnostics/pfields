@@ -29,6 +29,11 @@ Apply a function across the temporal dimension of a \code{"pField"} object by
 using \code{apply} on the columns of the object. The result of this gives
 a \code{"pField"} object with only one time step.
 }
+\examples{
+x <- pField(data = array(rnorm(10 * 10 * 100), dim = c(10, 10, 100)),
+            time = 1 : 100, lat = 1 : 10, lon = 1 : 10)
+ApplyTime(x, mean)
+}
 \author{
 Thomas Laepple
 }

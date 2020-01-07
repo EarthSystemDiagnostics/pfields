@@ -16,6 +16,13 @@ is.pTs(object)
 \description{
 Check if object is a \code{"pTs"} object.
 }
+\examples{
+# Some pTs object
+x <- pTs(lat = -75, lon = 0, time = 1 : 10)
+
+is.pTs(x)
+is.pTs(1 : 10)
+}
 \author{
 Thomas Laepple
 }

@@ -16,6 +16,13 @@ is.pField(object)
 \description{
 Check if object is a \code{"pField"} object.
 }
+\examples{
+# Some pField object
+x <- pField(lat = seq(-75, -80, -5), lon = c(0, 135, 215), time = 1 : 10)
+
+is.pField(x)
+is.pField(1 : 10)
+}
 \author{
 Thomas Laepple
 }

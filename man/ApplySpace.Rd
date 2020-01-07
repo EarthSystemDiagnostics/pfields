@@ -25,6 +25,11 @@ Apply a function across the spatial dimension of a \code{"pField"} object by
 using \code{apply} on the rows of the object. The result of this gives a
 \code{"pTs"} object.
 }
+\examples{
+x <- pField(data = array(rnorm(10 * 10 * 100), dim = c(10, 10, 100)),
+            time = 1 : 100, lat = 1 : 10, lon = 1 : 10)
+ApplySpace(x, sd)
+}
 \author{
 Thomas Laepple
 }

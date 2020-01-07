@@ -28,6 +28,20 @@ This function amends the history information of a \code{"pTs"} or
 to the \code{"history"} attribute of the object together with the date
 information of this action.
 }
+\examples{
+# Create empty pTs object:
+x <- pTs(lat = -75, lon = 0, time = 1,
+         history = sprintf("Object created."))
+
+# Check history
+GetHistory(x)
+
+# Some changes made
+x <- AddHistory(x, newhist = "Changed xyz.")
+
+# Check new history
+GetHistory(x)
+}
 \seealso{
 Other history: \code{\link{GetHistory}}
 }

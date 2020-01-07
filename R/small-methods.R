@@ -30,6 +30,11 @@ getname <- function(...) {
 ##' @source Function copied from "basis.R" in paleolibary/src/.
 ##' @author Thomas Laepple
 ##' @examples
+##' # Create empty pTs object:
+##' x <- pTs(lat = -75, lon = 0, time = 1,
+##'          history = sprintf("Object created."))
+##'
+##' GetHistory(x)
 ##' @aliases GetHistory gethistory
 ##' @export gethistory GetHistory
 GetHistory <- function(data) {
@@ -57,6 +62,18 @@ gethistory <- function(...){
 ##' @source Function copied from "basis.R" in paleolibary/src/.
 ##' @author Thomas Laepple
 ##' @examples
+##' # Create empty pTs object:
+##' x <- pTs(lat = -75, lon = 0, time = 1,
+##'          history = sprintf("Object created."))
+##'
+##' # Check history
+##' GetHistory(x)
+##'
+##' # Some changes made
+##' x <- AddHistory(x, newhist = "Changed xyz.")
+##'
+##' # Check new history
+##' GetHistory(x)
 ##' @aliases addhistory AddHistory
 ##' @export addhistory AddHistory
 AddHistory <- function(x, newhist, date = TRUE) {
@@ -81,6 +98,10 @@ addhistory <- function(...) {
 ##' @source Function copied from "basis.R" in paleolibary/src/.
 ##' @author Thomas Laepple
 ##' @examples
+##' # Some pField object
+##' x <- pField(lat = seq(-75, -80, -5), lon = c(0, 135, 215), time = 1 : 4)
+##'
+##' GetLat(x)
 ##' @aliases getlat GetLat
 ##' @export getlat GetLat
 GetLat <- function(data) {
@@ -103,6 +124,10 @@ getlat <- function(...) {
 ##' @source Function copied from "basis.R" in paleolibary/src/.
 ##' @author Thomas Laepple
 ##' @examples
+##' # Some pField object
+##' x <- pField(lat = seq(-75, -80, -5), lon = c(0, 135, 215), time = 1 : 4)
+##'
+##' GetLon(x)
 ##' @aliases getlon GetLon
 ##' @export getlon GetLon
 GetLon <- function(data) {
@@ -243,6 +268,12 @@ str.pTs <- function(object, ...) {
 ##' @return \code{TRUE} or \code{FALSE} depending on whether \code{object} is a
 ##' \code{"pField"} or not.
 ##' @author Thomas Laepple
+##' @examples
+##' # Some pField object
+##' x <- pField(lat = seq(-75, -80, -5), lon = c(0, 135, 215), time = 1 : 10)
+##'
+##' is.pField(x)
+##' is.pField(1 : 10)
 ##' @export
 is.pField <- function(object) {
 
@@ -256,6 +287,12 @@ is.pField <- function(object) {
 ##' @return \code{TRUE} or \code{FALSE} depending on whether \code{object} is a
 ##' \code{"pTs"} object or not.
 ##' @author Thomas Laepple
+##' @examples
+##' # Some pTs object
+##' x <- pTs(lat = -75, lon = 0, time = 1 : 10)
+##'
+##' is.pTs(x)
+##' is.pTs(1 : 10)
 ##' @export
 is.pTs <- function(object) {
 
@@ -280,6 +317,27 @@ is.pTs <- function(object) {
 ##'   \code{lon} (longitudes) and \code{dat} (the values of \code{data} at the
 ##'   coordinate positions).
 ##' @author Thomas Münch
+##' @examples
+##' # Create a pfield object covering two latitudes, three longitudes and
+##' # four time steps, let data values increase with latitude and time only:
+##' lat <- seq(-75, -80, -5)
+##' lon <- c(0, 135, 215)
+##' time <- 1 : 4
+##' space <- c(1, 1, 1, 2, 2, 2)
+##' spacetime <- c(space, 10 * space, 100 * space, 1000 * space)
+##'
+##' x <- pField(data = spacetime, lat = lat, lon = lon, time = time)
+##'
+##' # Average across time
+##' x.avg <- ApplyTime(x, mean)
+##'
+##' # Convert to data frame
+##' x.df <- pField2df(x.avg)
+##' x.df
+##'
+##' # Cut out some region
+##' x.df <- pField2df(x.avg, lat.min = -75, lon.min = 0, lon.max = 200)
+##' x.df
 ##' @export
 pField2df <- function(data,
                       lat.min = NULL, lat.max = NULL,

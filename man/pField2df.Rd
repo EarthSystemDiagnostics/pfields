@@ -32,6 +32,28 @@ Convert a static \code{"pField"} object, i.e. including only one time step,
 to a data frame with data, latitude and longitude columns, with the
 possibility to cut out a specified latitude-longitude region.
 }
+\examples{
+# Create a pfield object covering two latitudes, three longitudes and
+# four time steps, let data values increase with latitude and time only:
+lat <- seq(-75, -80, -5)
+lon <- c(0, 135, 215)
+time <- 1 : 4
+space <- c(1, 1, 1, 2, 2, 2)
+spacetime <- c(space, 10 * space, 100 * space, 1000 * space)
+
+x <- pField(data = spacetime, lat = lat, lon = lon, time = time)
+
+# Average across time
+x.avg <- ApplyTime(x, mean)
+
+# Convert to data frame
+x.df <- pField2df(x.avg)
+x.df
+
+# Cut out some region
+x.df <- pField2df(x.avg, lat.min = -75, lon.min = 0, lon.max = 200)
+x.df
+}
 \author{
 Thomas Münch
 }

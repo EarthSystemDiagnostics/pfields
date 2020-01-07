@@ -32,6 +32,61 @@
 ##' @source Function copied from "proxytype.R" in paleolibary/src/
 ##' @author Thomas Laepple; adapated by Thomas Münch
 ##' @examples
+##' # Create an empty pfield object covering two latitudes, three longitudes and
+##' # four time steps:
+##'
+##' lat <- c(-75, -80)
+##' lon <- c(0, 135, 215)
+##' time <- 1 : 4
+##'
+##' pf1 <- pField(lat = lat, lon = lon, time = time)
+##'
+##' # Now fill the object with data:
+##' # the important assumption is that the order of observations follows
+##' # increments first along longitudes, then along latitudes, and finally along
+##' # time (structure of netcdf files). Here, we let the values increase with
+##' # latitude and time only:
+##'
+##' space <- c(1, 1, 1, 2, 2, 2)
+##' spacetime <- c(space, 10 * space, 100 * space, 1000 * space)
+##'
+##' pf2 <- pField(data = spacetime, lat = lat, lon = lon, time = time)
+##'
+##' # Note that in this case, the number of data points must match the number of
+##' # observations defined by lat, lon and time:
+##'
+##' \dontrun{
+##' x <- pField(data = spacetime, lat = -75, lon = lon, time = time)
+##' }
+##'
+##' # Since R starts to read any array along its first dimension, all of the
+##' # following array shapes are identical with respect to the pfield object
+##' # created:
+##'
+##' # i) Matrix with rows corresponding to space and columns to time
+##' data <- spacetime
+##' dim(data) <- c(6, 4)
+##' pf3 <- pField(data, lat = lat, lon = lon, time = time)
+##'
+##' # ii) Vice versa
+##' data <- spacetime
+##' dim(data) <- c(4, 6)
+##' pf4 <- pField(data, lat = lat, lon = lon, time = time)
+##'
+##' # iii) Array with first dimension being longitude, second dimension being
+##' #      latitude, and third dimension being time:
+##' data <- spacetime
+##' dim(data) <- c(3, 2, 4)
+##' pf5 <- pField(data, lat = lat, lon = lon, time = time)
+##'
+##' # However, note that if you change the order of observations in the input,
+##' # the resulting pfield object will be different from the above examples!
+##'
+##' data <- spacetime
+##' dim(data) <- c(6, 4)
+##' data <- t(data) # order of observations changes
+##'
+##' pf.different <- pField(data, lat = lat, lon = lon, time = time)
 ##' @export
 pField <- function(data = NULL,
                    time = 1,

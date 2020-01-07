@@ -26,6 +26,13 @@ attributes of a \code{"pField"} object. These fields follow the same spatial
 pattern as the input object (i.e., for the first latitude the indices run
 along all longitudes, then jump to the next latitude, and so further).
 }
+\examples{
+field <- pField(lat = seq(0, 90, 10), lon = c(-10, 0, 10))
+
+latlons <- GetLatLonField(field)
+latlons$lat2d
+latlons$lon2d
+}
 \author{
 Thomas Laepple
 }

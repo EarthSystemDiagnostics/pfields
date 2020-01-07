@@ -38,6 +38,18 @@ observation points in the \code{"pField"} object, which is done by calling
 implemented for this. Note that requested lat/lon values outside the range
 of grid points in \code{data} will be processed with a warning.
 }
+\examples{
+# Create some empty pField object
+lat <- seq(-75, -80, -5)
+lon <- c(0, 135, 215)
+time <- 1 : 4
+
+x <- pField(lat = lat, lon = lon, time = time)
+
+# Extract grid point nearest to lat = -80, lon = 200:
+SelPoint(x, lat = -80, lon = 200, verbose = TRUE)
+SelPoint(x, lat = -80, lon = 200, simplify = FALSE, verbose = TRUE)
+}
 \author{
 Thomas Münch
 }

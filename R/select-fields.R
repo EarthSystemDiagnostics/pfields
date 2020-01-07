@@ -16,7 +16,6 @@
 #' @export SelSpace3D selspace.3D
 #' @aliases SelSpace3D selspace.3D
 #' @author Thomas Laepple
-#' @examples
 SelSpace3D <- function(data, lat1, lon1, SBOX = 5, tolLon = 10, 
                        bNN = FALSE, timeindexNA = 1) {
   warning("'SelSpace3D()' is experimental and in development; use with care.")
@@ -217,6 +216,17 @@ selspace.3D <- function(...) {
 ##' object with the time series at the grid point nearest to the requested
 ##' point.
 ##' @author Thomas Münch
+##' @examples
+##' # Create some empty pField object
+##' lat <- seq(-75, -80, -5)
+##' lon <- c(0, 135, 215)
+##' time <- 1 : 4
+##'
+##' x <- pField(lat = lat, lon = lon, time = time)
+##'
+##' # Extract grid point nearest to lat = -80, lon = 200:
+##' SelPoint(x, lat = -80, lon = 200, verbose = TRUE)
+##' SelPoint(x, lat = -80, lon = 200, simplify = FALSE, verbose = TRUE)
 ##' @export
 SelPoint <- function(data, lat, lon, simplify = TRUE, verbose = FALSE) {
 

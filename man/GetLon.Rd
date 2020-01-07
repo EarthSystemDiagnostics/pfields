@@ -22,6 +22,12 @@ The function returns the \code{"lon"} attribute of a \code{"pTs"} or
 \code{"pField"} object, i.e. the longitudes of the proxy sampling locations,
 as a numeric vector.
 }
+\examples{
+# Some pField object
+x <- pField(lat = seq(-75, -80, -5), lon = c(0, 135, 215), time = 1 : 4)
+
+GetLon(x)
+}
 \author{
 Thomas Laepple
 }

@@ -20,6 +20,13 @@ Character string with the \code{"history"} attribute of \code{data}.
 The function returns the \code{"history"} attribute of a \code{"pTs"} or
 \code{"pField"} object.
 }
+\examples{
+# Create empty pTs object:
+x <- pTs(lat = -75, lon = 0, time = 1,
+         history = sprintf("Object created."))
+
+GetHistory(x)
+}
 \seealso{
 Other history: \code{\link{AddHistory}}
 }
