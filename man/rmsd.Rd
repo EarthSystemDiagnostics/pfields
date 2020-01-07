@@ -30,7 +30,7 @@ Calculate the root-mean-square deviation (rmsd) of two numeric vectors.
 \examples{
 v1 <- rnorm(1000)
 v2 <- rnorm(1000)
-rmsd(v1, v2)
+pfields:::rmsd(v1, v2)
 }
 \author{
 Thomas Münch

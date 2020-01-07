@@ -207,10 +207,11 @@ GetDistanceField <- function(field, latlon.field = NULL,
 #' lat <- seq(-74, -80, -2)
 #' lon <- seq(-2, 7, 3)
 #'
-#' d <- GetDistance(lat0, lon0, lat, lon, verbose = TRUE)
+#' d <- pfields:::GetDistance(lat0, lon0, lat, lon, verbose = TRUE)
 #' range(d)
 #'
-#' d <- GetDistance(lat0, lon0, lat, lon, get.nearest = TRUE, verbose = TRUE)
+#' d <- pfields:::GetDistance(lat0, lon0, lat, lon, get.nearest = TRUE,
+#'                            verbose = TRUE)
 #' range(d)
 #' @source This is a copy of the function of the same name in package
 #' \code{"ecustools"}; see

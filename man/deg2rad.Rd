@@ -25,7 +25,7 @@ coordinate values.
 Convert coordinates from degree to radian and vice versa.
 }
 \examples{
-deg2rad(deg2rad(-75), inverse = TRUE)
+pfields:::deg2rad(pfields:::deg2rad(-75), inverse = TRUE)
 }
 \author{
 Thomas Münch

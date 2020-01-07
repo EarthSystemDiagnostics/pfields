@@ -388,7 +388,7 @@ pField2df <- function(data,
 #' @examples
 #' v1 <- rnorm(1000)
 #' v2 <- rnorm(1000)
-#' rmsd(v1, v2)
+#' pfields:::rmsd(v1, v2)
 #' @source This is a copy of the function of the same name in package
 #' \code{"ecustools"}; see
 #' \url{https://github.com/EarthSystemDiagnostics/ecustools}.
@@ -412,7 +412,7 @@ rmsd <- function(v1, v2, na.rm = FALSE) {
 #' coordinate values.
 #' @author Thomas Münch
 #' @examples
-#' deg2rad(deg2rad(-75), inverse = TRUE)
+#' pfields:::deg2rad(pfields:::deg2rad(-75), inverse = TRUE)
 #' @source This is a copy of the function of the same name in package
 #' \code{"ecustools"}; see
 #' \url{https://github.com/EarthSystemDiagnostics/ecustools}.
