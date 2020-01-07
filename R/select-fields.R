@@ -47,7 +47,7 @@ SelSpace3D <- function(data, lat1, lon1, SBOX = 5, tolLon = 10,
   } else pointer3d <- pointer3d.raw
   
   # longitude jump by wrapping
-  wrap.dLon <- dplyr::first(temp$lon) - (dplyr::last(temp$lon) - 360)
+  wrap.dLon <- utils::head(temp$lon, 1) - (utils::tail(temp$lon, 1) - 360)
   
   if ((wrap.dLon > 0) & (wrap.dLon < tolLon)) {
     ### Check if we the data is global on the longitudes, than Copy
@@ -78,11 +78,11 @@ SelSpace3D <- function(data, lat1, lon1, SBOX = 5, tolLon = 10,
   
   
   # attention... midpoints are given...
-  if ((lat1 > dplyr::last(temp$lat)) | (lat1 < dplyr::first(temp$lat))) {
+  if ((lat1 > utils::tail(temp$lat, 1)) | (lat1 < utils::head(temp$lat, 1))) {
     warning("Latitude outside field")
     return(NULL)
   }
-  if ((lon1 > dplyr::last(lon.3c)) | (lon1 < dplyr::first(lon.3c))) {
+  if ((lon1 > utils::tail(lon.3c, 1)) | (lon1 < utils::head(lon.3c, 1))) {
     warning("Longitude outside field")
     return(NULL)
   }
