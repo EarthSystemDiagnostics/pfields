@@ -40,3 +40,4 @@ remotes::install_github("EarthSystemDiagnostics/pfields")
 ## Limitations
 
 * The analysis functions in **pfields** are not optimised for speed. Thus, if you need to loop over many matrix operations performed on a `pField` or `pTs` object and you do not rely on their class functionality, it might be computationally more efficient to return to the original class of the object, i.e., if `x` is the `pField` or `pTs` object, then set `class(x) <- attr(x, "oclass")`.
+* Plotting routines for `pField` and `pTs` objects are not yet available.
