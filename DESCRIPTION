@@ -1,8 +1,10 @@
 Package: pfields
 Title: An R Package to Analyse Gridded Field Data
 Version: 0.0.0.9000
-Authors@R: c(person("Thomas", "Münch", email = "tmuench@awi.de", role = c("aut", "cre")), 
-    person("Thomas", "Laepple", role = c("aut")))
+Author:
+  Thomas Muench [aut, cre],
+  Thomas Laepple [aut]
+Maintainer: Thomas Muench <thomas.muench@awi.de>
 Description: This R package provides functions to create and analyse objects of
     class "pField" and "pTs", which are enhanced two-dimensional time-series
     objects, i.e. matrices where the rows represent a time-series object and the
