@@ -17,11 +17,10 @@ More specifically:
 remotes::install_github("EarthSystemDiagnostics/pfields")
 ```
 ## Dependencies
-**pfields** depends on the following packages which are installed upon installing **pfields**:
-* `dplyr`,
-* `ecustools`.
+**pfields** depends on the following CRAN package:
+* `geosphere`,
 
-`dplyr` is available on CRAN; `ecustools` is available on [GitHub](https://github.com/EarthSystemDiagnostics/ecustools).
+ which is installed upon installing **pfields**.
 
 ## Functionality
 
