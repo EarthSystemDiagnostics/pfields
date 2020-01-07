@@ -167,8 +167,9 @@ summary.pField <- function(object, ...) {
     cat(paste(atb$history, collapse = "\n"))
     cat("\n")
     cat("\nTime range:\n")
-    cat(paste0("tmin = ", min(time(object)), ", tmax = ", max(time(object)),
-               ", N = ", length(time(object)), "\n"))
+    cat(paste0("tmin = ", min(stats::time(object)),
+               ", tmax = ", max(stats::time(object)),
+               ", N = ", length(stats::time(object)), "\n"))
     cat("\nSpatial extent:\n")
     cat(paste0("lat: min = ", min(atb$lat), ", max = ", max(atb$lat),
                ", N = ", length(atb$lat), "\n"))
@@ -210,8 +211,9 @@ summary.pTs <- function(object, ...) {
     cat(paste(atb$history, collapse = "\n"))
     cat("\n")
     cat("\nTime range:\n")
-    cat(paste0("tmin = ", min(time(object)), ", tmax = ", max(time(object)),
-               ", N = ", length(time(object)), "\n"))
+    cat(paste0("tmin = ", min(stats::time(object)),
+               ", tmax = ", max(stats::time(object)),
+               ", N = ", length(stats::time(object)), "\n"))
     cat("\nSpatial extent:\n")
     cat(paste0("lat: min = ", min(atb$lat), ", max = ", max(atb$lat),
                ", N = ", length(atb$lat), "\n"))
@@ -232,14 +234,14 @@ summary.pTs <- function(object, ...) {
 ##' \code{summary}; performed with the \code{str} method generic to the
 ##' \code{"oclass"} of \code{object}.
 ##' @param object an object of class \code{"pField"}.
-##' @param ... further arguments passed on to \code{\link{str}}.
-##' @seealso \code{\link{str}}
+##' @param ... further arguments passed on to \code{\link[utils]{str}}.
+##' @seealso \code{\link[utils]{str}}
 ##' @author Thomas Münch
 ##' @export
 str.pField <- function(object, ...) {
 
     class(object) <- attr(object, "oclass")
-    str(object, ...)
+    utils::str(object, ...)
 
 }
 
@@ -250,14 +252,14 @@ str.pField <- function(object, ...) {
 ##' \code{summary}; performed with the \code{str} method generic to the
 ##' \code{"oclass"} of \code{object}.
 ##' @param object an object of class \code{"pTs"}.
-##' @param ... further arguments passed on to \code{\link{str}}.
-##' @seealso \code{\link{str}}
+##' @param ... further arguments passed on to \code{\link[utils]{str}}.
+##' @seealso \code{\link[utils]{str}}
 ##' @author Thomas Münch
 ##' @export
 str.pTs <- function(object, ...) {
 
     class(object) <- attr(object, "oclass")
-    str(object, ...)
+    utils::str(object, ...)
 
 }
 

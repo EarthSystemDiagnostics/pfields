@@ -42,8 +42,8 @@ Ops.pField <- function (e1, e2) {
 
     atb1  <- attributes(e1)
     atb2  <- attributes(e2)
-    tim1 <- time(e1)
-    tim2 <- time(e2)
+    tim1 <- stats::time(e1)
+    tim2 <- stats::time(e2)
 
     if ((length(atb1$lat) != length(atb2$lat)) |
         (length(atb1$lon) != length(atb2$lon))) {
@@ -71,10 +71,10 @@ Ops.pField <- function (e1, e2) {
                     "Result time base set to first time base."))
     }
 
-    e1 <- ts(e1, start = attr(tim1, "tsp")[1],
-             frequency = attr(tim1, "tsp")[3])
-    e2 <- ts(e2, start = attr(tim2, "tsp")[1],
-             frequency = attr(tim1, "tsp")[3])
+    e1 <- stats::ts(e1, start = attr(tim1, "tsp")[1],
+                    frequency = attr(tim1, "tsp")[3])
+    e2 <- stats::ts(e2, start = attr(tim2, "tsp")[1],
+                    frequency = attr(tim1, "tsp")[3])
 
     e <- NextMethod()
 
@@ -82,7 +82,7 @@ Ops.pField <- function (e1, e2) {
       sprintf("A (%s):", nam1), atb1$history,
       sprintf("B (%s):", nam2), atb2$history)
 
-    res <- pField(t(e), time = time(e),
+    res <- pField(t(e), time = stats::time(e),
                   lat = atb1$lat, lon = atb1$lon,
                   name = newname, history = newname)
 
@@ -141,8 +141,8 @@ Ops.pTs <- function (e1, e2) {
 
     atb1 <- attributes(e1)
     atb2 <- attributes(e2)
-    tim1 <- time(e1)
-    tim2 <- time(e2)
+    tim1 <- stats::time(e1)
+    tim2 <- stats::time(e2)
 
     if ((length(atb1$lat) != length(atb2$lat)) |
         (length(atb1$lon) != length(atb2$lon))) {
@@ -170,10 +170,10 @@ Ops.pTs <- function (e1, e2) {
                     "Result time base set to first time base."))
     }
 
-    e1 <- ts(e1, start = attr(tim1, "tsp")[1],
-             frequency = attr(tim1, "tsp")[3])
-    e2 <- ts(e2, start = attr(tim2, "tsp")[1],
-             frequency = attr(tim1, "tsp")[3])
+    e1 <- stats::ts(e1, start = attr(tim1, "tsp")[1],
+                    frequency = attr(tim1, "tsp")[3])
+    e2 <- stats::ts(e2, start = attr(tim2, "tsp")[1],
+                    frequency = attr(tim1, "tsp")[3])
 
     e <- NextMethod()
 
@@ -184,7 +184,7 @@ Ops.pTs <- function (e1, e2) {
     if (!all(atb1$lat == atb2$lat)) lat <- NA else lat = atb1$lat
     if (!all(atb1$lon == atb2$lon)) lon <- NA else lon = atb1$lon
 
-    res <- pTs(e, time = time(e), lat = lat, lon = lon,
+    res <- pTs(e, time = stats::time(e), lat = lat, lon = lon,
                name = newname, history = newname)
 
   } else {

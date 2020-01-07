@@ -145,12 +145,12 @@ pField <- function(data = NULL,
     if (abs(max(diff(time)) - min(diff(time))) > kTol)
       stop("Time steps are not equidistant.")
     
-    result <- ts(t(data), start = time[1], deltat = (time[2] - time[1]))
+    result <- stats::ts(t(data), start = time[1], deltat = (time[2] - time[1]))
 
   } else {
 
     # only one time step exists
-    result <- ts(t(data), start = time[1])
+    result <- stats::ts(t(data), start = time[1])
   }
 
   # Put attributes and classes

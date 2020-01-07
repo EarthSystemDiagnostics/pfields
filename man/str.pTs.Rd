@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{an object of class \code{"pTs"}.}
 
-\item{...}{further arguments passed on to \code{\link{str}}.}
+\item{...}{further arguments passed on to \code{\link[utils]{str}}.}
 }
 \description{
 Method function to compactly display the internal structure of a
@@ -18,7 +18,7 @@ Method function to compactly display the internal structure of a
 \code{"oclass"} of \code{object}.
 }
 \seealso{
-\code{\link{str}}
+\code{\link[utils]{str}}
 }
 \author{
 Thomas Münch

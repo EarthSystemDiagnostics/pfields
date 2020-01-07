@@ -24,7 +24,7 @@ SelSpace3D <- function(data, lat1, lon1, SBOX = 5, tolLon = 10,
   temp <- attributes(data)
   
   if (prod(dim(data)) != length(temp$lon) * length(temp$lat) * 
-    length(time(data))) 
+    length(stats::time(data))) 
     stop("N(data) != N(lat)*N(lon)*N(time)")
   
   # make a 2D array [lon,lat] containing the orginal indices
@@ -33,7 +33,7 @@ SelSpace3D <- function(data, lat1, lon1, SBOX = 5, tolLon = 10,
   
   # arrange to get a continous field
   nlon <- length(temp$lon)
-  nTime <- length(time(data))
+  nTime <- length(stats::time(data))
   d <- diff(temp$lon)
   
   if (max(d) > (min(d) + 0.01)) {
@@ -178,7 +178,7 @@ SelSpace3D <- function(data, lat1, lon1, SBOX = 5, tolLon = 10,
     }
   }
   # create time series
-  result <- pTs(intpoldata, time(data), choice.lat, choice.lon, 
+  result <- pTs(intpoldata, stats::time(data), choice.lat, choice.lon, 
     GetName(data), GetHistory(data), date = FALSE)
   
   hist <- paste("selspace: lat=", lat1, " lon=", lon1, sep = "")
@@ -259,13 +259,13 @@ SelPoint <- function(data, lat, lon, simplify = TRUE, verbose = FALSE) {
 
     if (simplify) {
         
-        res <- pTs(data = data[, i], time = time(data),
+        res <- pTs(data = data[, i], time = stats::time(data),
                    lat = lat.nn, lon = lon.nn,
                    name = GetName(data), history = GetHistory(data),
                    date = FALSE)
     } else {
         
-        res <- pField(data = data[, i], time = time(data),
+        res <- pField(data = data[, i], time = stats::time(data),
                       lat = lat.nn, lon = lon.nn,
                       name = GetName(data), history = GetHistory(data),
                       date = FALSE)

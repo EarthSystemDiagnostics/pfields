@@ -61,13 +61,13 @@
       if (nobs != length(res) | n2 == 1) {
 
         # subset not pField-compatible or single site; return pTs object
-        res <- pTs(res, time(x)[p1], lat, lon,
+        res <- pTs(res, stats::time(x)[p1], lat, lon,
                    atb$name, atb$history, date = FALSE)
 
       } else {
 
         # subset can be shaped into pField object
-        res <- pField(t(res), time(x)[p1],
+        res <- pField(t(res), stats::time(x)[p1],
                       lat = unique(lat), lon = unique(lon),
                       name = atb$name, history = atb$history,
                       date = FALSE)
@@ -84,7 +84,7 @@
         hist <- sprintf("Subset [%s, ]", deparse(substitute(p1)))
         if (n1 > 1) res <- t(res)
 
-        res <- pField(res, time(x)[p1], atb$lat, atb$lon,
+        res <- pField(res, stats::time(x)[p1], atb$lat, atb$lon,
                       atb$name, atb$history, date = FALSE)
 
       } else {
@@ -114,13 +114,13 @@
     if (nobs != length(res) | n2 == 1) {
 
       # subset not pField-compatible or single site; return pTs object
-      res <- pTs(res, time(x), lat, lon,
+      res <- pTs(res, stats::time(x), lat, lon,
                  atb$name, atb$history, date = FALSE)
 
     } else {
 
       # subset can be shaped into pField object
-      res <- pField(t(res), time(x), unique(lat), unique(lon),
+      res <- pField(t(res), stats::time(x), unique(lat), unique(lon),
                     atb$name, atb$history, date = FALSE)
     }
   }
@@ -176,7 +176,7 @@
                       deparse(substitute(p1)),
                       deparse(substitute(p2)))
 
-      res <- pTs(res, time(x)[p1],
+      res <- pTs(res, stats::time(x)[p1],
                  lat = atb$lat[p2.l], lon = atb$lon[p2.l],
                  name = atb$name[p2.n], atb$history, date = FALSE)
 
@@ -188,7 +188,7 @@
 
         hist <- sprintf("Subset [%s]", deparse(substitute(p1)))
 
-        res <- pTs(res, time(x)[p1], lat = atb$lat, lon = atb$lon,
+        res <- pTs(res, stats::time(x)[p1], lat = atb$lat, lon = atb$lon,
                    name = atb$name, atb$history, date = FALSE)
 
         # check if [a] oder [a, ] is requested from multivariate pTs
@@ -200,7 +200,7 @@
 
         hist <- sprintf("Subset [%s, ]", deparse(substitute(p1)))
 
-        res <- pTs(res, time(x)[p1], lat = atb$lat, lon = atb$lon,
+        res <- pTs(res, stats::time(x)[p1], lat = atb$lat, lon = atb$lon,
                    name = atb$name, atb$history, date = FALSE)
 
       } else {
@@ -224,7 +224,7 @@
 
     hist <- sprintf("Subset [, %s]", deparse(substitute(p2)))
 
-    res <- pTs(res, time(x),
+    res <- pTs(res, stats::time(x),
                lat = atb$lat[p2.l], lon = atb$lon[p2.l],
                name = atb$name[p2.n], atb$history, date = FALSE)        
 

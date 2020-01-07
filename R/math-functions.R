@@ -30,28 +30,28 @@ cor.pTs <- function(point, field, debug = FALSE, ...) {
         message(paste("Common time period:", start, end))
     }
 
-    x <- window(point, start, end)
-    y <- window(field, start, end)
+    x <- stats::window(point, start, end)
+    y <- stats::window(field, start, end)
 
     if (is.pField(field)) {
 
         # Correlation with pField
         class(y) <- "matrix"
 
-        res <- cor(x, y, ...)
+        res <- stats::cor(x, y, ...)
         attr(res, "history") <- c(
             sprintf("A (%s):", GetName(point)), GetHistory(point),
             sprintf("B (%s):", GetName(field)), GetHistory(field))
         hist <- paste0("cor.pTs(", GetName(point), ", ", GetName(field), ")")
 
-        res <- pField(res, time = max(time(field)),
+        res <- pField(res, time = max(stats::time(field)),
                       lat = GetLat(field), lon = GetLon(field),
                       name = "correlation", history = hist)
         
     } else {
 
         # Correlation with other object
-        res <- cor(x, y, ...)
+        res <- stats::cor(x, y, ...)
 
         attr(res, "history") <- c(
             sprintf("A (%s):", GetName(point)), GetHistory(point),
@@ -155,8 +155,8 @@ Decor.pField <- function(field, lat1, lon1, lat2, lon2,
     } else {
 
       stop("Method to select region not yet implemented!")
-      sfield <- selspace(field, lat1 = lat1, lat2 = lat2,
-                         lon1 = lon1, lon2 = lon2)
+      #sfield <- selspace(field, lat1 = lat1, lat2 = lat2,
+      #                   lon1 = lon1, lon2 = lon2)
 
     }
 
@@ -214,10 +214,10 @@ Decor.pField <- function(field, lat1, lon1, lat2, lon2,
       {
         # decorrelation length when no error...
 
-        mod <- nls(y ~ exp(-x / tau),
-                   data = data.frame(x = d, y = c(corr)),
-                   start = list(tau = tau.start),
-                   control = nls.control(maxiter = 100))
+        mod <- stats::nls(y ~ exp(-x / tau),
+                          data = data.frame(x = d, y = c(corr)),
+                          start = list(tau = tau.start),
+                          control = stats::nls.control(maxiter = 100))
 
         mod.sum <- summary(mod)
         if (verbose) print(mod.sum)
@@ -258,7 +258,7 @@ Decor.pField <- function(field, lat1, lon1, lat2, lon2,
 
   } else {
 
-    decor.length <- pField(tau, time = max(time(field)),
+    decor.length <- pField(tau, time = max(stats::time(field)),
                            lat = GetLat(sfield), lon = GetLon(sfield),
                            name = "decorrelation",
                            history = GetHistory(field), date = FALSE)

@@ -39,7 +39,7 @@ ApplySpace <- function(data, FUN, ...) {
 
       ts <- apply(data[, index], 1, FUN, ...)
       attr(ts, "history") <- GetHistory(data)
-      res <- pTs(data = ts, time = time(data),
+      res <- pTs(data = ts, time = stats::time(data),
                  name = GetName(data),
                  history = sprintf("ApplySpace: %s",
                                    deparse(substitute(FUN))))
@@ -78,7 +78,7 @@ applyspace <- function(...) {
 ApplyTime <- function(data, FUN, newtime = NULL, ...) {
   
   if (is.null(newtime)) {
-    newtime <- mean(time(data))
+    newtime <- mean(stats::time(data))
   }
 
   field <- apply(data, 2, FUN, ...)
@@ -132,7 +132,7 @@ ApplyFields <- function(fld1, fld2, FUN, newtime = NULL, ...) {
 
   # Check fields for same time and Lat-Lon basis
 
-  if (max(abs(time(fld1) - time(fld2))) != 0) {
+  if (max(abs(stats::time(fld1) - stats::time(fld2))) != 0) {
     stop("Supplied fields have different observation times.")
   }
   if (max(abs(GetLat(fld1) - GetLat(fld2))) != 0) {
@@ -143,7 +143,7 @@ ApplyFields <- function(fld1, fld2, FUN, newtime = NULL, ...) {
   }
 
   if (is.null(newtime)) {
-    newtime <- mean(time(fld1))
+    newtime <- mean(stats::time(fld1))
   }
   
   # Convert to data frames for use in mapply
