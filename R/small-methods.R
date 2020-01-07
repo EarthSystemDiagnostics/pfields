@@ -12,12 +12,12 @@
 ##' @aliases getname GetName
 ##' @export getname GetName
 GetName <- function(data) {
-    return(attr(data, "name"))
+  return(attr(data, "name"))
 }
 getname <- function(...) {
-    warning("getname is deprecated and replaced with GetName
-            to comply with ECUS R style guide.")
-    GetName(...)
+  warning("getname is deprecated and replaced with GetName
+           to comply with ECUS R style guide.")
+  GetName(...)
 }
 
 ##' Get history of a proxy object
@@ -38,13 +38,13 @@ getname <- function(...) {
 ##' @aliases GetHistory gethistory
 ##' @export gethistory GetHistory
 GetHistory <- function(data) {
-    #print(match.call())
-    return(attr(data, "history"))
+  #print(match.call())
+  return(attr(data, "history"))
 }
 gethistory <- function(...){
-    warning("gethistory is deprecated and replaced with GetHistory
-            to comply with ECUS R style guide.")
-    GetName(...)
+  warning("gethistory is deprecated and replaced with GetHistory
+           to comply with ECUS R style guide.")
+  GetName(...)
 }
 
 ##' Amend the history of a proxy object
@@ -77,14 +77,14 @@ gethistory <- function(...){
 ##' @aliases addhistory AddHistory
 ##' @export addhistory AddHistory
 AddHistory <- function(x, newhist, date = TRUE) {
-    if (date) newhist <- paste(date(), newhist, sep = ": ")
-    attr(x, "history") <- c(attr(x, "history"), newhist)
-    return(x)
+  if (date) newhist <- paste(date(), newhist, sep = ": ")
+  attr(x, "history") <- c(attr(x, "history"), newhist)
+  return(x)
 }
 addhistory <- function(...) {
-    warning("addhistory is deprecated and replaced with AddHistory
-            to comply with ECUS R style guide.")
-    AddHistory(...)
+  warning("addhistory is deprecated and replaced with AddHistory
+           to comply with ECUS R style guide.")
+  AddHistory(...)
 }
 
 ##' Get latitudes of proxy object
@@ -105,12 +105,12 @@ addhistory <- function(...) {
 ##' @aliases getlat GetLat
 ##' @export getlat GetLat
 GetLat <- function(data) {
-    return(attr(data, "lat"))
+  return(attr(data, "lat"))
 }
 getlat <- function(...) {
-    warning("getlat is deprecated and replaced with GetLat
-            to comply with ECUS R style guide.")
-    GetLat(...)
+  warning("getlat is deprecated and replaced with GetLat
+           to comply with ECUS R style guide.")
+  GetLat(...)
 }
 
 ##' Get longitudes of proxy object
@@ -131,12 +131,12 @@ getlat <- function(...) {
 ##' @aliases getlon GetLon
 ##' @export getlon GetLon
 GetLon <- function(data) {
-    return(attr(data, "lon"))
+  return(attr(data, "lon"))
 }
 getlon <- function(...) {
-    warning("getlon is deprecated and replaced with GetLon
-            to comply with ECUS R style guide.")
-    GetLon(...)
+  warning("getlon is deprecated and replaced with GetLon
+           to comply with ECUS R style guide.")
+  GetLon(...)
 }
 
 ##' pField summary
@@ -148,38 +148,38 @@ getlon <- function(...) {
 ##' @export
 summary.pField <- function(object, ...) {
 
-    atb <- attributes(object)
+  atb <- attributes(object)
 
-    x <- c(object)
-    nas <- is.na(x)
-    x <- x[!nas]
-    qq <- stats::quantile(x)
-    qq <- c(qq[1L:3L], mean(x), qq[4L:5L])
-    names(qq) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", 
-                   "Max.")
-    if (any(nas)) qq <- c(qq, `NA's` = sum(nas))
+  x <- c(object)
+  nas <- is.na(x)
+  x <- x[!nas]
+  qq <- stats::quantile(x)
+  qq <- c(qq[1L:3L], mean(x), qq[4L:5L])
+  names(qq) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.",
+                 "Max.")
+  if (any(nas)) qq <- c(qq, `NA's` = sum(nas))
 
-    class(qq) <- c("summaryDefault", "table")
+  class(qq) <- c("summaryDefault", "table")
 
-    cat("Proxy field object\n")
-    cat(sprintf("\nNames: %s\n", paste(atb$name, collapse = " / ")))
-    cat("\nHistory:\n")
-    cat(paste(atb$history, collapse = "\n"))
-    cat("\n")
-    cat("\nTime range:\n")
-    cat(paste0("tmin = ", min(stats::time(object)),
-               ", tmax = ", max(stats::time(object)),
-               ", N = ", length(stats::time(object)), "\n"))
-    cat("\nSpatial extent:\n")
-    cat(paste0("lat: min = ", min(atb$lat), ", max = ", max(atb$lat),
-               ", N = ", length(atb$lat), "\n"))
-    cat(paste0("lon: min = ", min(atb$lon), ", max = ", max(atb$lon),
-               ", N = ", length(atb$lon), "\n"))
+  cat("Proxy field object\n")
+  cat(sprintf("\nNames: %s\n", paste(atb$name, collapse = " / ")))
+  cat("\nHistory:\n")
+  cat(paste(atb$history, collapse = "\n"))
+  cat("\n")
+  cat("\nTime range:\n")
+  cat(paste0("tmin = ", min(stats::time(object)),
+             ", tmax = ", max(stats::time(object)),
+             ", N = ", length(stats::time(object)), "\n"))
+  cat("\nSpatial extent:\n")
+  cat(paste0("lat: min = ", min(atb$lat), ", max = ", max(atb$lat),
+             ", N = ", length(atb$lat), "\n"))
+  cat(paste0("lon: min = ", min(atb$lon), ", max = ", max(atb$lon),
+             ", N = ", length(atb$lon), "\n"))
 
-    cat("\nData range:\n")
-    print(qq)
+  cat("\nData range:\n")
+  print(qq)
 
-    invisible(NULL)
+  invisible(NULL)
 
 }
 
@@ -192,38 +192,38 @@ summary.pField <- function(object, ...) {
 ##' @export
 summary.pTs <- function(object, ...) {
 
-    atb <- attributes(object)
+  atb <- attributes(object)
 
-    x <- c(object)
-    nas <- is.na(x)
-    x <- x[!nas]
-    qq <- stats::quantile(x)
-    qq <- c(qq[1L:3L], mean(x), qq[4L:5L])
-    names(qq) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", 
-                   "Max.")
-    if (any(nas)) qq <- c(qq, `NA's` = sum(nas))
+  x <- c(object)
+  nas <- is.na(x)
+  x <- x[!nas]
+  qq <- stats::quantile(x)
+  qq <- c(qq[1L:3L], mean(x), qq[4L:5L])
+  names(qq) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.",
+                 "Max.")
+  if (any(nas)) qq <- c(qq, `NA's` = sum(nas))
 
-    class(qq) <- c("summaryDefault", "table")
+  class(qq) <- c("summaryDefault", "table")
 
-    cat("Proxy time series object\n")
-    cat(sprintf("\nNames: %s\n", paste(atb$name, collapse = " / ")))
-    cat("\nHistory:\n")
-    cat(paste(atb$history, collapse = "\n"))
-    cat("\n")
-    cat("\nTime range:\n")
-    cat(paste0("tmin = ", min(stats::time(object)),
-               ", tmax = ", max(stats::time(object)),
-               ", N = ", length(stats::time(object)), "\n"))
-    cat("\nSpatial extent:\n")
-    cat(paste0("lat: min = ", min(atb$lat), ", max = ", max(atb$lat),
-               ", N = ", length(atb$lat), "\n"))
-    cat(paste0("lon: min = ", min(atb$lon), ", max = ", max(atb$lon),
-               ", N = ", length(atb$lon), "\n"))
+  cat("Proxy time series object\n")
+  cat(sprintf("\nNames: %s\n", paste(atb$name, collapse = " / ")))
+  cat("\nHistory:\n")
+  cat(paste(atb$history, collapse = "\n"))
+  cat("\n")
+  cat("\nTime range:\n")
+  cat(paste0("tmin = ", min(stats::time(object)),
+             ", tmax = ", max(stats::time(object)),
+             ", N = ", length(stats::time(object)), "\n"))
+  cat("\nSpatial extent:\n")
+  cat(paste0("lat: min = ", min(atb$lat), ", max = ", max(atb$lat),
+             ", N = ", length(atb$lat), "\n"))
+  cat(paste0("lon: min = ", min(atb$lon), ", max = ", max(atb$lon),
+             ", N = ", length(atb$lon), "\n"))
 
-    cat("\nData range:\n")
-    print(qq)
+  cat("\nData range:\n")
+  print(qq)
 
-    invisible(NULL)
+  invisible(NULL)
 
 }
 
@@ -240,8 +240,8 @@ summary.pTs <- function(object, ...) {
 ##' @export
 str.pField <- function(object, ...) {
 
-    class(object) <- attr(object, "oclass")
-    utils::str(object, ...)
+  class(object) <- attr(object, "oclass")
+  utils::str(object, ...)
 
 }
 
@@ -258,8 +258,8 @@ str.pField <- function(object, ...) {
 ##' @export
 str.pTs <- function(object, ...) {
 
-    class(object) <- attr(object, "oclass")
-    utils::str(object, ...)
+  class(object) <- attr(object, "oclass")
+  utils::str(object, ...)
 
 }
 
@@ -279,7 +279,7 @@ str.pTs <- function(object, ...) {
 ##' @export
 is.pField <- function(object) {
 
-    sum(class(object) == "pField") > 0
+  sum(class(object) == "pField") > 0
 }
 
 ##' pTs object
@@ -298,7 +298,7 @@ is.pField <- function(object) {
 ##' @export
 is.pTs <- function(object) {
 
-    sum(class(object) == "pTs") > 0
+  sum(class(object) == "pTs") > 0
 }
 
 ##' Convert field to data frame
@@ -345,32 +345,32 @@ pField2df <- function(data,
                       lat.min = NULL, lat.max = NULL,
                       lon.min = NULL, lon.max = NULL) {
 
-    if (nrow(data) != 1)
-        stop("Method not yet suited for more than 1 timestep.")
+  if (nrow(data) != 1)
+    stop("Method not yet suited for more than 1 timestep.")
 
-    coord.field <- GetLatLonField(data)
+  coord.field <- GetLatLonField(data)
 
-    df <- data.frame(
-        lat = coord.field$lat2d,
-        lon = coord.field$lon2d,
-        dat = c(data[1, ]))
+  df <- data.frame(
+    lat = coord.field$lat2d,
+    lon = coord.field$lon2d,
+    dat = c(data[1, ]))
 
-    df$lon[df$lon > 180] <- df$lon[df$lon > 180] - 360
+  df$lon[df$lon > 180] <- df$lon[df$lon > 180] - 360
 
-    if (!length(lat.min)) lat.min <- min(df$lat)
-    if (!length(lat.max)) lat.max <- max(df$lat)
-    if (!length(lon.min)) lon.min <- min(df$lon)
-    if (!length(lon.max)) lon.max <- max(df$lon)
+  if (!length(lat.min)) lat.min <- min(df$lat)
+  if (!length(lat.max)) lat.max <- max(df$lat)
+  if (!length(lon.min)) lon.min <- min(df$lon)
+  if (!length(lon.max)) lon.max <- max(df$lon)
 
-    i <- which(df$lat >= lat.min & df$lat <= lat.max)
-    df <- df[i, ]
+  i <- which(df$lat >= lat.min & df$lat <= lat.max)
+  df <- df[i, ]
 
-    i <- which(df$lon >= lon.min & df$lon <= lon.max)
-    df <- df[i, ]
+  i <- which(df$lon >= lon.min & df$lon <= lon.max)
+  df <- df[i, ]
 
-    df$lon[df$lon < 0] <- df$lon[df$lon < 0] + 360
+  df$lon[df$lon < 0] <- df$lon[df$lon < 0] + 360
 
-    return(df)
+  return(df)
 
 }
 
