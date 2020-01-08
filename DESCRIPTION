@@ -1,0 +1,19 @@
+Package: pfields
+Title: An R Package to Analyse Gridded Field Data
+Version: 0.0.0.9000
+Author:
+  Thomas Muench [aut, cre],
+  Thomas Laepple [aut]
+Maintainer: Thomas Muench <thomas.muench@awi.de>
+Description: This R package provides functions to create and analyse objects of
+    class "pField" and "pTs", which are enhanced two-dimensional time-series
+    objects, i.e. matrices where the rows represent a time-series object and the
+    columns a spatial or typological dimension.
+Depends:
+    R (>= 3.2.1)
+License: file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Imports: 
+    geosphere
