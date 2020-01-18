@@ -61,6 +61,12 @@
       if (nobs != length(res) | n2 == 1) {
 
         # subset not pField-compatible or single site; return pTs object
+
+        if (length(p1) == 1 & length(p2) > 1) {
+          # preserve matrix for single time step at multiple sites
+          dim(res) <- c(1, length(p2))
+        }
+
         res <- pTs(res, stats::time(x)[p1], lat, lon,
                    atb$name, atb$history, date = FALSE)
 
@@ -172,6 +178,11 @@
 
       # [a, b] given; give back time series b at times a
 
+      if (length(p1) == 1 & length(p2) > 1) {
+        # preserve matrix for single time step at multiple columns
+        dim(res) <- c(1, length(res))
+      }
+
       hist <- sprintf("Subset [%s, %s]",
                       deparse(substitute(p1)),
                       deparse(substitute(p2)))
@@ -199,6 +210,11 @@
         # [a, ] requested; give back time series at times a
 
         hist <- sprintf("Subset [%s, ]", deparse(substitute(p1)))
+
+        if (length(p1) == 1) {
+          # preserve matrix for single time step at multiple columns
+          dim(res) <- c(1, length(res))
+        }
 
         res <- pTs(res, stats::time(x)[p1], lat = atb$lat, lon = atb$lon,
                    name = atb$name, atb$history, date = FALSE)
