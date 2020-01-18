@@ -16,9 +16,11 @@ test_that("pField indexing works correctly.", {
 
   expect_error(subset <- pfield[1, ], NA)
   expect_true(is.pField(subset))
+  expect_equal(dim(subset), c(1, 6))
 
   expect_error(subset <- pfield[, 1], NA)
   expect_true(is.pTs(subset))
+  expect_equal(dim(subset), NULL)
 
   expect_warning(subset <- pfield[10])
   expect_equal(c(subset), 10)
@@ -44,12 +46,15 @@ test_that("pField indexing works correctly.", {
 
   expect_error(subset <- pfield[1, 1 : 3], NA)
   expect_true(is.pField(subset))
+  expect_equal(dim(subset), c(1, 3))
 
   expect_error(subset <- pfield[1, 1 : 4], NA)
   expect_true(is.pTs(subset))
+  expect_equal(dim(subset), c(1, 4))
 
   expect_error(subset <- pfield[1 : 3, 1], NA)
   expect_true(is.pTs(subset))
+  expect_equal(dim(subset), NULL)
 
   # Test 2D vector indexing
 
