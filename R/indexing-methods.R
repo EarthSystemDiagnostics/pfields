@@ -62,9 +62,9 @@
 
         # subset not pField-compatible or single site; return pTs object
 
-        if (length(p1) == 1 & length(p2) > 1) {
+        if (n1 == 1 & n2 > 1) {
           # preserve matrix for single time step at multiple sites
-          dim(res) <- c(1, length(p2))
+          dim(res) <- c(1, n2)
         }
 
         res <- pTs(res, stats::time(x)[p1], lat, lon,
@@ -169,6 +169,9 @@
   res <- NextMethod("[")
   atb <- attributes(x)
 
+  if (is.p1) n1 <- length(p1)
+  if (is.p2) n2 <- length(p2)
+
   if (is.p2) {
 
     p2.l <- 1
@@ -184,7 +187,7 @@
 
       # [a, b] given; give back time series b at times a
 
-      if (length(p1) == 1 & length(p2) > 1) {
+      if (n1 == 1 & n2 > 1) {
         # preserve matrix for single time step at multiple columns
         dim(res) <- c(1, length(res))
       }
@@ -211,13 +214,13 @@
         # check if [a] oder [a, ] is requested from multivariate pTs
         
       } else if (is.array(res) |
-                 (length(res) == ncol(x) & length(p1) == 1)) {
+                 (length(res) == ncol(x) & n1 == 1)) {
 
         # [a, ] requested; give back time series at times a
 
         hist <- sprintf("Subset [%s, ]", deparse(substitute(p1)))
 
-        if (length(p1) == 1) {
+        if (n1 == 1) {
           # preserve matrix for single time step at multiple columns
           dim(res) <- c(1, length(res))
         }
@@ -246,7 +249,7 @@
 
     hist <- sprintf("Subset [, %s]", deparse(substitute(p2)))
 
-    if (nrow(x) == 1 & length(p2) > 1) {
+    if (nrow(x) == 1 & n2 > 1) {
       # preserve matrix for single time step at multiple columns
       dim(res) <- c(1, length(res))
     }
