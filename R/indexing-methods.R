@@ -120,6 +120,12 @@
     if (nobs != length(res) | n2 == 1) {
 
       # subset not pField-compatible or single site; return pTs object
+
+      if (nrow(x) == 1 & n2 > 1) {
+        # preserve matrix for single time step at multiple sites
+        dim(res) <- c(1, n2)
+      }
+
       res <- pTs(res, stats::time(x), lat, lon,
                  atb$name, atb$history, date = FALSE)
 
@@ -239,6 +245,11 @@
     #[, b] given; give back time series b
 
     hist <- sprintf("Subset [, %s]", deparse(substitute(p2)))
+
+    if (nrow(x) == 1 & length(p2) > 1) {
+      # preserve matrix for single time step at multiple columns
+      dim(res) <- c(1, length(res))
+    }
 
     res <- pTs(res, stats::time(x),
                lat = atb$lat[p2.l], lon = atb$lon[p2.l],

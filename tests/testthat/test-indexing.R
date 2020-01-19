@@ -18,6 +18,10 @@ test_that("pField indexing works correctly.", {
   expect_true(is.pField(subset))
   expect_equal(dim(subset), c(1, 6))
 
+  expect_error(subset <- subset[, 1 : 4], NA)
+  expect_true(is.pTs(subset))
+  expect_equal(dim(subset), c(1, 4))
+
   expect_error(subset <- pfield[, 1], NA)
   expect_true(is.pTs(subset))
   expect_equal(dim(subset), NULL)
@@ -79,6 +83,10 @@ test_that("pTs indexing works correctly for single-site pTs.", {
   expect_true(is.pTs(subset))
   expect_equal(dim(subset), c(1, 10))
 
+  expect_error(subset <- subset[, 1 : 5], NA)
+  expect_true(is.pTs(subset))
+  expect_equal(dim(subset), c(1, 5))
+
   expect_error(subset <- pts[, 1], NA)
   expect_true(is.pTs(subset))
   expect_equal(dim(subset), NULL)
@@ -130,6 +138,10 @@ test_that("pTs indexing works correctly for multi-site pTs.", {
   expect_error(subset <- pts[1, ], NA)
   expect_true(is.pTs(subset))
   expect_equal(dim(subset), c(1, 10))
+
+  expect_error(subset <- subset[, 1 : 5], NA)
+  expect_true(is.pTs(subset))
+  expect_equal(dim(subset), c(1, 5))
 
   expect_error(subset <- pts[, 1], NA)
   expect_true(is.pTs(subset))
