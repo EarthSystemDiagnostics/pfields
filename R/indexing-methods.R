@@ -178,7 +178,7 @@
     p2.n <- 1
 
     if (length(atb$lat) > 1) p2.l <- p2
-    if (length(atb$name) > 1) p2.l <- p2
+    if (length(atb$name) > 1) p2.n <- p2
   }
 
   if (is.p1) {
