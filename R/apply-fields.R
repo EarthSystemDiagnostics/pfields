@@ -175,6 +175,11 @@ applytime <- function(...) {
 ##' @export
 ApplyFields <- function(fld1, fld2, FUN, newtime = NULL, ...) {
 
+  # Validate input
+  if (!is.pField(fld1) | !is.pField(fld2)) {
+    stop("Input fields must be pField objects.")
+  }
+
   # Check dimensions of input objects
 
   if (sum(dim(fld1)) != sum(dim(fld2))) {
@@ -183,7 +188,7 @@ ApplyFields <- function(fld1, fld2, FUN, newtime = NULL, ...) {
 
   # Check fields for same time and Lat-Lon basis
 
-  if (max(abs(stats::time(fld1) - stats::time(fld2))) != 0) {
+  if (max(abs(c(stats::time(fld1)) - c(stats::time(fld2)))) != 0) {
     stop("Supplied fields have different observation times.")
   }
   if (max(abs(GetLat(fld1) - GetLat(fld2))) != 0) {

@@ -34,6 +34,10 @@ cor.pTs <- function(point, field, debug = FALSE, ...) {
   start <- max(start(point)[1], start(field)[1])
   end <- min(end(point)[1], end(field)[1])
 
+  if (start > end) {
+    stop("'point' and 'field' have non-overlapping observation times.")
+  }
+
   if (debug) {
     message(paste("Common time period:", start, end))
   }
