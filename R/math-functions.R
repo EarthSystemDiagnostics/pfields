@@ -1,16 +1,17 @@
 ##' Correlation of point with field
 ##'
-##' Calculate the correlation between an object of class \code{"pTs"} and an
-##' object of class \code{"pField"}.
-##' @param point a \code{"pTs"} object.
-##' @param field a \code{"pField"} object.
+##' Calculate the correlation between a point time series of class \code{"pTs"}
+##' and a field of class \code{"pField"} or \code{"pTs"}, but also supports
+##' standard objects.
+##' @param point a \code{"pTs"} point object.
+##' @param field a \code{"pField"} or \code{"pTs"} field.
 ##' @param debug \code{point} and \code{field} are brought onto the same time
 ##' basis. If \code{debug = TRUE}, this new time basis is printed as a message.
 ##' @param ... further arguments passed on to the base R correlation function
 ##' \code{\link[stats]{cor}}, such as the \code{use} argument.
 ##' @return the correlation(s) between \code{point} and \code{field}. The class
 ##' of the result depends on the class of \code{field}, so a \code{"pField"}
-##' object usually.
+##' or \code{"pTs"} object usually.
 ##' @source Function based on "mat.pField.R" in paleolibary/src/.
 ##' @author Thomas Laepple, modified by Thomas Münch
 ##' @examples
@@ -19,50 +20,76 @@
 ##'                 lat = 1 : 10, lon = 1 : 10)
 ##'
 ##' correlation <- cor.pTs(point, field)
+##'
+##' pts.field <- field[, 1 : 25]
+##' correlation <- cor.pTs(point, pts.field)
 ##' @export
 cor.pTs <- function(point, field, debug = FALSE, ...) {
-    
-    # Bring input data on the same time basis
-    start <- max(start(point)[1], start(field)[1])
-    end <- min(end(point)[1], end(field)[1])
-    
-    if (debug) {
-        message(paste("Common time period:", start, end))
-    }
 
-    x <- stats::window(point, start, end)
-    y <- stats::window(field, start, end)
+  if (!is.null(dim(point))) {
+    if (ncol(point) > 1) stop("'point' is not a single point time series.")
+  }
 
-    if (is.pField(field)) {
+  # Bring input data on the same time basis
+  start <- max(start(point)[1], start(field)[1])
+  end <- min(end(point)[1], end(field)[1])
 
-        # Correlation with pField
-        class(y) <- "matrix"
+  if (start > end) {
+    stop("'point' and 'field' have non-overlapping observation times.")
+  }
 
-        res <- stats::cor(x, y, ...)
-        attr(res, "history") <- c(
-            sprintf("A (%s):", GetName(point)), GetHistory(point),
-            sprintf("B (%s):", GetName(field)), GetHistory(field))
-        hist <- paste0("cor.pTs(", GetName(point), ", ", GetName(field), ")")
+  if (debug) {
+    message(paste("Common time period:", start, end))
+  }
 
-        res <- pField(res, time = max(stats::time(field)),
-                      lat = GetLat(field), lon = GetLon(field),
-                      name = "correlation", history = hist)
-        
-    } else {
+  x <- stats::window(point, start, end)
+  y <- stats::window(field, start, end)
 
-        # Correlation with other object
-        res <- stats::cor(x, y, ...)
+  if (is.pField(field)) {
 
-        attr(res, "history") <- c(
-            sprintf("A (%s):", GetName(point)), GetHistory(point),
-            sprintf("B (%s):", deparse(substitute(field))))
-        hist <- paste0("cor.pTs(", GetName(point), ", ",
-                       deparse(substitute(field)), ")")
+    # Correlation with pField
+    class(y) <- "matrix"
 
-        res <- AddHistory(res, hist)
-    }
+    res <- stats::cor(x, y, ...)
+    attr(res, "history") <- c(
+      sprintf("A (%s):", GetName(point)), GetHistory(point),
+      sprintf("B (%s):", GetName(field)), GetHistory(field))
+    hist <- paste0("cor.pTs(", GetName(point), ", ", GetName(field), ")")
 
-    return(res)
+    res <- pField(res, time = max(stats::time(field)),
+                  lat = GetLat(field), lon = GetLon(field),
+                  name = "correlation", history = hist)
+
+  } else if (is.pTs(field)) {
+
+    # Correlation with pTs
+    class(y) <- "matrix"
+
+    res <- stats::cor(x, y, ...)
+    attr(res, "history") <- c(
+      sprintf("A (%s):", GetName(point)), GetHistory(point),
+      sprintf("B (%s):", GetName(field)), GetHistory(field))
+    hist <- paste0("cor.pTs(", GetName(point), ", ", GetName(field), ")")
+
+    res <- pTs(res, time = max(stats::time(field)),
+               lat = GetLat(field), lon = GetLon(field),
+               name = "correlation", history = hist)
+
+  } else {
+
+    # Correlation with other object
+    res <- stats::cor(x, y, ...)
+
+    attr(res, "history") <- c(
+      sprintf("A (%s):", GetName(point)), GetHistory(point),
+      sprintf("B (%s):", deparse(substitute(field))))
+    hist <- paste0("cor.pTs(", GetName(point), ", ",
+                   deparse(substitute(field)), ")")
+
+    res <- AddHistory(res, hist)
+  }
+
+  return(res)
 }
 
 ##' Decorrelation of field

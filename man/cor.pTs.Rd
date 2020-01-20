@@ -10,9 +10,9 @@ Function based on "mat.pField.R" in paleolibary/src/.
 cor.pTs(point, field, debug = FALSE, ...)
 }
 \arguments{
-\item{point}{a \code{"pTs"} object.}
+\item{point}{a \code{"pTs"} point object.}
 
-\item{field}{a \code{"pField"} object.}
+\item{field}{a \code{"pField"} or \code{"pTs"} field.}
 
 \item{debug}{\code{point} and \code{field} are brought onto the same time
 basis. If \code{debug = TRUE}, this new time basis is printed as a message.}
@@ -23,11 +23,12 @@ basis. If \code{debug = TRUE}, this new time basis is printed as a message.}
 \value{
 the correlation(s) between \code{point} and \code{field}. The class
 of the result depends on the class of \code{field}, so a \code{"pField"}
-object usually.
+or \code{"pTs"} object usually.
 }
 \description{
-Calculate the correlation between an object of class \code{"pTs"} and an
-object of class \code{"pField"}.
+Calculate the correlation between a point time series of class \code{"pTs"}
+and a field of class \code{"pField"} or \code{"pTs"}, but also supports
+standard objects.
 }
 \examples{
 point <- rnorm(100)
@@ -35,6 +36,9 @@ field <- pField(rnorm(100 * 10 * 10), time = 1 : 100,
                 lat = 1 : 10, lon = 1 : 10)
 
 correlation <- cor.pTs(point, field)
+
+pts.field <- field[, 1 : 25]
+correlation <- cor.pTs(point, pts.field)
 }
 \author{
 Thomas Laepple, modified by Thomas Münch

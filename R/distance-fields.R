@@ -1,11 +1,12 @@
-##' pField latitude and longitude fields
+##' Latitude and longitude fields
 ##'
 ##' Get latitude and longitude field vectors from the latitude and longitude
-##' attributes of a \code{"pField"} object. These fields follow the same spatial
-##' pattern as the input object (i.e., for the first latitude the indices run
-##' along all longitudes, then jump to the next latitude, and so further).
-##' @param data a \code{"pField"} object for which to return the lat/lon
-##' fields.
+##' attributes of a \code{"pField"} or \code{"pTs"} object. These fields follow
+##' the same spatial pattern as the input object (i.e., for the first latitude
+##' the indices run along all longitudes, then jump to the next latitude, and so
+##' further).
+##' @param data a \code{"pField"} or \code{"pTs"} object for which to return the
+##' lat/lon fields.
 ##' @param simplify if \code{FALSE} (the default), the fields are returned as a
 ##' two component list, otherwise as a 2 x n matrix, where the first row is the
 ##' latitude and the second row the longitude field.
@@ -18,17 +19,35 @@
 ##' latlons <- GetLatLonField(field)
 ##' latlons$lat2d
 ##' latlons$lon2d
+##'
+##' # subset incompletely to create a pTs object
+##' field <- field[, 1 : 4]
+##' latlons <- GetLatLonField(field)
+##' latlons$lat2d
+##' latlons$lon2d
 ##' @export
 GetLatLonField <- function(data, simplify = FALSE) {
 
   lat <- GetLat(data)
   lon <- GetLon(data)
 
-  nlat <- length(lat)
-  nlon <- length(lon)
+  if (is.pTs(data)) {
 
-  lon2d <- rep(lon, nlat)
-  lat2d <- rep(lat, each = nlon)
+    lon2d <- lon
+    lat2d <- lat
+
+  } else if (is.pField(data)) {
+
+    nlat <- length(lat)
+    nlon <- length(lon)
+
+    lon2d <- rep(lon, nlat)
+    lat2d <- rep(lat, each = nlon)
+
+  } else {
+
+    stop("Input is whether pField nor pTs object.")
+  }
 
   res <- list(lat2d = lat2d, lon2d = lon2d)
 
