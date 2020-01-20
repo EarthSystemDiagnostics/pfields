@@ -26,66 +26,66 @@
 ##' @export
 cor.pTs <- function(point, field, debug = FALSE, ...) {
 
-    if (!is.null(dim(point))) {
-        if (ncol(point) > 1) stop("'point' is not a single point time series.")
-    }
-    
-    # Bring input data on the same time basis
-    start <- max(start(point)[1], start(field)[1])
-    end <- min(end(point)[1], end(field)[1])
-    
-    if (debug) {
-        message(paste("Common time period:", start, end))
-    }
+  if (!is.null(dim(point))) {
+    if (ncol(point) > 1) stop("'point' is not a single point time series.")
+  }
 
-    x <- stats::window(point, start, end)
-    y <- stats::window(field, start, end)
+  # Bring input data on the same time basis
+  start <- max(start(point)[1], start(field)[1])
+  end <- min(end(point)[1], end(field)[1])
 
-    if (is.pField(field)) {
+  if (debug) {
+    message(paste("Common time period:", start, end))
+  }
 
-        # Correlation with pField
-        class(y) <- "matrix"
+  x <- stats::window(point, start, end)
+  y <- stats::window(field, start, end)
 
-        res <- stats::cor(x, y, ...)
-        attr(res, "history") <- c(
-            sprintf("A (%s):", GetName(point)), GetHistory(point),
-            sprintf("B (%s):", GetName(field)), GetHistory(field))
-        hist <- paste0("cor.pTs(", GetName(point), ", ", GetName(field), ")")
+  if (is.pField(field)) {
 
-        res <- pField(res, time = max(stats::time(field)),
-                      lat = GetLat(field), lon = GetLon(field),
-                      name = "correlation", history = hist)
-        
-    } else if (is.pTs(field)) {
+    # Correlation with pField
+    class(y) <- "matrix"
 
-        # Correlation with pTs
-        class(y) <- "matrix"
+    res <- stats::cor(x, y, ...)
+    attr(res, "history") <- c(
+      sprintf("A (%s):", GetName(point)), GetHistory(point),
+      sprintf("B (%s):", GetName(field)), GetHistory(field))
+    hist <- paste0("cor.pTs(", GetName(point), ", ", GetName(field), ")")
 
-        res <- stats::cor(x, y, ...)
-        attr(res, "history") <- c(
-            sprintf("A (%s):", GetName(point)), GetHistory(point),
-            sprintf("B (%s):", GetName(field)), GetHistory(field))
-        hist <- paste0("cor.pTs(", GetName(point), ", ", GetName(field), ")")
+    res <- pField(res, time = max(stats::time(field)),
+                  lat = GetLat(field), lon = GetLon(field),
+                  name = "correlation", history = hist)
 
-        res <- pTs(res, time = max(stats::time(field)),
-                   lat = GetLat(field), lon = GetLon(field),
-                   name = "correlation", history = hist)
+  } else if (is.pTs(field)) {
 
-    } else {
+    # Correlation with pTs
+    class(y) <- "matrix"
 
-        # Correlation with other object
-        res <- stats::cor(x, y, ...)
+    res <- stats::cor(x, y, ...)
+    attr(res, "history") <- c(
+      sprintf("A (%s):", GetName(point)), GetHistory(point),
+      sprintf("B (%s):", GetName(field)), GetHistory(field))
+    hist <- paste0("cor.pTs(", GetName(point), ", ", GetName(field), ")")
 
-        attr(res, "history") <- c(
-            sprintf("A (%s):", GetName(point)), GetHistory(point),
-            sprintf("B (%s):", deparse(substitute(field))))
-        hist <- paste0("cor.pTs(", GetName(point), ", ",
-                       deparse(substitute(field)), ")")
+    res <- pTs(res, time = max(stats::time(field)),
+               lat = GetLat(field), lon = GetLon(field),
+               name = "correlation", history = hist)
 
-        res <- AddHistory(res, hist)
-    }
+  } else {
 
-    return(res)
+    # Correlation with other object
+    res <- stats::cor(x, y, ...)
+
+    attr(res, "history") <- c(
+      sprintf("A (%s):", GetName(point)), GetHistory(point),
+      sprintf("B (%s):", deparse(substitute(field))))
+    hist <- paste0("cor.pTs(", GetName(point), ", ",
+                   deparse(substitute(field)), ")")
+
+    res <- AddHistory(res, hist)
+  }
+
+  return(res)
 }
 
 ##' Decorrelation of field
