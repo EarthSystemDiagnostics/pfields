@@ -11,28 +11,34 @@ Function copied from "basis.R" in paleolibary/src/.
 ApplyTime(data, FUN, newtime = NULL, ...)
 }
 \arguments{
-\item{data}{a \code{"pField"} object.}
+\item{data}{a \code{"pField"} or \code{"pTs"} object.}
 
 \item{FUN}{the function to be applied.}
 
-\item{newtime}{Specify the observation time point corresponding to the
-resulting \code{"pField"} object. For \code{NULL} (the default), the average
-of the time points in \code{data} is used.}
+\item{newtime}{Specify the observation time point of the result. For
+\code{NULL} (the default), the average of the time points in \code{data} is
+used.}
 
 \item{...}{further arguments passed on to \code{FUN}.}
 }
 \value{
-a \code{"pField"} object with the results of the function applied.
+a \code{"pField"} or \code{"pTs"} object with the results of the
+function applied.
 }
 \description{
-Apply a function across the temporal dimension of a \code{"pField"} object by
-using \code{apply} on the columns of the object. The result of this gives
-a \code{"pField"} object with only one time step.
+Apply a function across the temporal dimension of a \code{"pField"} or
+\code{"pTs"} object by using \code{apply} on the columns of the object. The
+result of this gives a \code{"pField"} or \code{"pTs"} object with only one
+time step.
 }
 \examples{
 x <- pField(data = array(rnorm(10 * 10 * 100), dim = c(10, 10, 100)),
             time = 1 : 100, lat = 1 : 10, lon = 1 : 10)
-ApplyTime(x, mean)
+y <- ApplyTime(x, mean)
+
+# subset incompletely to create a pTs object
+x.pts <- x[, 1 : 15]
+y.pts <- ApplyTime(x.pts, mean) # is the same as y[, 1 : 15]
 }
 \author{
 Thomas Laepple

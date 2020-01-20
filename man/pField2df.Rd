@@ -8,7 +8,7 @@ pField2df(data, lat.min = NULL, lat.max = NULL, lon.min = NULL,
   lon.max = NULL)
 }
 \arguments{
-\item{data}{a \code{"pField"} object with one timestep.}
+\item{data}{a \code{"pField"} or \code{"pTs"} object with one timestep.}
 
 \item{lat.min}{set the minimum latitude for the output; per default the
 minimum in \code{data} is used.}
@@ -28,9 +28,9 @@ A data frame with the three columns \code{lat} (latitudes),
   coordinate positions).
 }
 \description{
-Convert a static \code{"pField"} object, i.e. including only one time step,
-to a data frame with data, latitude and longitude columns, with the
-possibility to cut out a specified latitude-longitude region.
+Convert a static \code{"pField"} or \code{"pTs"} object, i.e. including only
+one time step, to a data frame with data, latitude and longitude columns,
+with the possibility to cut out a specified latitude-longitude region.
 }
 \examples{
 # Create a pfield object covering two latitudes, three longitudes and
@@ -53,6 +53,14 @@ x.df
 # Cut out some region
 x.df <- pField2df(x.avg, lat.min = -75, lon.min = 0, lon.max = 200)
 x.df
+
+# Subset incompletely to create a pTs object
+x.pts <- x[, 1 : 4]
+x.avg <- ApplyTime(x.pts, mean)
+
+# Convert to data frame
+x.df <- pField2df(x.avg)
+x.df # the same as x.df[1 : 4,] from above
 }
 \author{
 Thomas Münch

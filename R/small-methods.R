@@ -303,10 +303,10 @@ is.pTs <- function(object) {
 
 ##' Convert field to data frame
 ##'
-##' Convert a static \code{"pField"} object, i.e. including only one time step,
-##' to a data frame with data, latitude and longitude columns, with the
-##' possibility to cut out a specified latitude-longitude region.
-##' @param data a \code{"pField"} object with one timestep.
+##' Convert a static \code{"pField"} or \code{"pTs"} object, i.e. including only
+##' one time step, to a data frame with data, latitude and longitude columns,
+##' with the possibility to cut out a specified latitude-longitude region.
+##' @param data a \code{"pField"} or \code{"pTs"} object with one timestep.
 ##' @param lat.min set the minimum latitude for the output; per default the
 ##' minimum in \code{data} is used.
 ##' @param lat.max set the maximum latitude for the output; per default the
@@ -340,6 +340,14 @@ is.pTs <- function(object) {
 ##' # Cut out some region
 ##' x.df <- pField2df(x.avg, lat.min = -75, lon.min = 0, lon.max = 200)
 ##' x.df
+##'
+##' # Subset incompletely to create a pTs object
+##' x.pts <- x[, 1 : 4]
+##' x.avg <- ApplyTime(x.pts, mean)
+##'
+##' # Convert to data frame
+##' x.df <- pField2df(x.avg)
+##' x.df # the same as x.df[1 : 4,] from above
 ##' @export
 pField2df <- function(data,
                       lat.min = NULL, lat.max = NULL,

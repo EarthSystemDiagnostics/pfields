@@ -2,11 +2,16 @@
 ##'
 ##' Apply a function across the spatial dimension of a \code{"pField"} object by
 ##' using \code{apply} on the rows of the object. The result of this gives a
-##' \code{"pTs"} object.
-##' @param data a \code{"pField"} object.
+##' \code{"pTs"} vector object, i.e. a single time series.
+##'
+##' Input columns which only contain NA values are stripped befor applying the
+##' function. If only one non-NA column is present, this column is returned
+##' unchanged with a warning.
+##' @param data a \code{"pField"} or \code{"pTs"} object.
 ##' @param FUN the function to be applied.
 ##' @param ... further arguments passed on to \code{FUN}.
-##' @return a \code{"pTs"} object with the results of the function applied.
+##' @return a single \code{"pTs"} time series with the results of the function
+##'   applied.
 ##' @source Function copied from "basis.R" in paleolibary/src/.
 ##' @author Thomas Laepple
 ##' @examples
@@ -17,35 +22,42 @@
 ##' @export applyspace ApplySpace
 ApplySpace <- function(data, FUN, ...) {
 
-  if (is.null(ncol(data))) {
+  # Input error checking
 
-    stop("Input seems not to be a pField object.")
-
-  } else {
-
-    index <- which(!is.na(colSums(data)))
-
-    if (length(index) == 0) {
-
-      stop("No non-NA columns in input to apply FUN on.")
-
-    } else if (length(index) == 1) {
-
-      warning(paste("Only 1 non-NA column in input;",
-                    "returning original data from there."))
-      res <- data[, index]
-
-    } else {
-
-      ts <- apply(data[, index], 1, FUN, ...)
-      attr(ts, "history") <- GetHistory(data)
-      res <- pTs(data = ts, time = stats::time(data),
-                 name = GetName(data),
-                 history = sprintf("ApplySpace: %s",
-                                   deparse(substitute(FUN))))
-
-    }
+  if (!is.pField(data) & !is.pTs(data)) {
+    stop("Input is whether pField nor pTs object.")
   }
+
+  if (is.null(dim(data))) {
+    stop("Input is not a matrix.")
+  }
+
+  if (ncol(data) == 1) {
+    stop("Cannot apply across space: input has only one spatial dimension.")
+  }
+
+  # Checking number of non-NA columns
+
+  index <- which(!is.na(colSums(data)))
+
+  if (length(index) == 0) {
+    stop("No non-NA columns in input to apply FUN on.")
+  }
+
+  if (length(index) == 1) {
+    warning("Only 1 non-NA column in input; ",
+            "returning original data from there.")
+    return(data[, index])
+  }
+
+  # Apply across space
+
+  ts <- apply(data[, index], 1, FUN, ...)
+  attr(ts, "history") <- GetHistory(data)
+  res <- pTs(data = ts, time = stats::time(data),
+             name = GetName(data),
+             history = sprintf("ApplySpace: %s",
+                               deparse(substitute(FUN))))
 
   return(res)
 }
@@ -57,37 +69,76 @@ applyspace <- function(...) {
 
 ##' Apply a function across time
 ##'
-##' Apply a function across the temporal dimension of a \code{"pField"} object by
-##' using \code{apply} on the columns of the object. The result of this gives
-##' a \code{"pField"} object with only one time step.
-##' @param data a \code{"pField"} object.
+##' Apply a function across the temporal dimension of a \code{"pField"} or
+##' \code{"pTs"} object by using \code{apply} on the columns of the object. The
+##' result of this gives a \code{"pField"} or \code{"pTs"} object with only one
+##' time step.
+##' @param data a \code{"pField"} or \code{"pTs"} object.
 ##' @param FUN the function to be applied.
-##' @param newtime Specify the observation time point corresponding to the
-##' resulting \code{"pField"} object. For \code{NULL} (the default), the average
-##' of the time points in \code{data} is used.
+##' @param newtime Specify the observation time point of the result. For
+##' \code{NULL} (the default), the average of the time points in \code{data} is
+##' used.
 ##' @param ... further arguments passed on to \code{FUN}.
-##' @return a \code{"pField"} object with the results of the function applied.
+##' @return a \code{"pField"} or \code{"pTs"} object with the results of the
+##' function applied.
 ##' @source Function copied from "basis.R" in paleolibary/src/.
 ##' @author Thomas Laepple
 ##' @examples
 ##' x <- pField(data = array(rnorm(10 * 10 * 100), dim = c(10, 10, 100)),
 ##'             time = 1 : 100, lat = 1 : 10, lon = 1 : 10)
-##' ApplyTime(x, mean)
+##' y <- ApplyTime(x, mean)
+##'
+##' # subset incompletely to create a pTs object
+##' x.pts <- x[, 1 : 15]
+##' y.pts <- ApplyTime(x.pts, mean) # is the same as y[, 1 : 15]
 ##' @aliases applytime ApplyTime
 ##' @export applytime ApplyTime
 ApplyTime <- function(data, FUN, newtime = NULL, ...) {
-  
+
+  # Input error checking
+
+  if (!is.pField(data) & !is.pTs(data)) {
+    stop("Input is whether pField nor pTs object.")
+  }
+
+  if (is.null(dim(data))) {
+    stop("Input is not a matrix.")
+  }
+
+  if (nrow(data) == 1) {
+    stop("Cannot apply across time: input has only one temporal dimension.")
+  }
+
+  # Set output time step
+
   if (is.null(newtime)) {
     newtime <- mean(stats::time(data))
   }
 
+  # Apply across time
+
   field <- apply(data, 2, FUN, ...)
   attr(field, "history") <- GetHistory(data)
-  res <- pField(data = field, time = newtime,
-                lat = GetLat(data), lon = GetLon(data),
-                name = GetName(data),
-                history = sprintf("ApplyTime: %s",
-                                  deparse(substitute(FUN))))
+
+  if (is.pField(data)) {
+
+    res <- pField(data = field, time = newtime,
+                  lat = GetLat(data), lon = GetLon(data),
+                  name = GetName(data),
+                  history = sprintf("ApplyTime: %s",
+                                    deparse(substitute(FUN))))
+  } else {
+
+    if (length(newtime) == 1) {
+      dim(field) <- c(1, ncol(data))
+    }
+
+    res <- pTs(data = field, time = newtime,
+               lat = GetLat(data), lon = GetLon(data),
+               name = GetName(data),
+               history = sprintf("ApplyTime: %s",
+                                 deparse(substitute(FUN))))
+  }
   
   return(res)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/distance-fields.R
 \name{GetLatLonField}
 \alias{GetLatLonField}
-\title{pField latitude and longitude fields}
+\title{Latitude and longitude fields}
 \source{
 Function copied from "basis.R" in paleolibary/src/.
 }
@@ -10,8 +10,8 @@ Function copied from "basis.R" in paleolibary/src/.
 GetLatLonField(data, simplify = FALSE)
 }
 \arguments{
-\item{data}{a \code{"pField"} object for which to return the lat/lon
-fields.}
+\item{data}{a \code{"pField"} or \code{"pTs"} object for which to return the
+lat/lon fields.}
 
 \item{simplify}{if \code{FALSE} (the default), the fields are returned as a
 two component list, otherwise as a 2 x n matrix, where the first row is the
@@ -22,13 +22,20 @@ a two component list or 2 x n matrix.
 }
 \description{
 Get latitude and longitude field vectors from the latitude and longitude
-attributes of a \code{"pField"} object. These fields follow the same spatial
-pattern as the input object (i.e., for the first latitude the indices run
-along all longitudes, then jump to the next latitude, and so further).
+attributes of a \code{"pField"} or \code{"pTs"} object. These fields follow
+the same spatial pattern as the input object (i.e., for the first latitude
+the indices run along all longitudes, then jump to the next latitude, and so
+further).
 }
 \examples{
 field <- pField(lat = seq(0, 90, 10), lon = c(-10, 0, 10))
 
+latlons <- GetLatLonField(field)
+latlons$lat2d
+latlons$lon2d
+
+# subset incompletely to create a pTs object
+field <- field[, 1 : 4]
 latlons <- GetLatLonField(field)
 latlons$lat2d
 latlons$lon2d

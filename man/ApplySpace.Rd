@@ -11,19 +11,25 @@ Function copied from "basis.R" in paleolibary/src/.
 ApplySpace(data, FUN, ...)
 }
 \arguments{
-\item{data}{a \code{"pField"} object.}
+\item{data}{a \code{"pField"} or \code{"pTs"} object.}
 
 \item{FUN}{the function to be applied.}
 
 \item{...}{further arguments passed on to \code{FUN}.}
 }
 \value{
-a \code{"pTs"} object with the results of the function applied.
+a single \code{"pTs"} time series with the results of the function
+  applied.
 }
 \description{
 Apply a function across the spatial dimension of a \code{"pField"} object by
 using \code{apply} on the rows of the object. The result of this gives a
-\code{"pTs"} object.
+\code{"pTs"} vector object, i.e. a single time series.
+}
+\details{
+Input columns which only contain NA values are stripped befor applying the
+function. If only one non-NA column is present, this column is returned
+unchanged with a warning.
 }
 \examples{
 x <- pField(data = array(rnorm(10 * 10 * 100), dim = c(10, 10, 100)),
