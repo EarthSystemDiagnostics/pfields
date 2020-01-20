@@ -61,6 +61,12 @@
       if (nobs != length(res) | n2 == 1) {
 
         # subset not pField-compatible or single site; return pTs object
+
+        if (n1 == 1 & n2 > 1) {
+          # preserve matrix for single time step at multiple sites
+          dim(res) <- c(1, n2)
+        }
+
         res <- pTs(res, stats::time(x)[p1], lat, lon,
                    atb$name, atb$history, date = FALSE)
 
@@ -114,6 +120,12 @@
     if (nobs != length(res) | n2 == 1) {
 
       # subset not pField-compatible or single site; return pTs object
+
+      if (nrow(x) == 1 & n2 > 1) {
+        # preserve matrix for single time step at multiple sites
+        dim(res) <- c(1, n2)
+      }
+
       res <- pTs(res, stats::time(x), lat, lon,
                  atb$name, atb$history, date = FALSE)
 
@@ -157,13 +169,16 @@
   res <- NextMethod("[")
   atb <- attributes(x)
 
+  if (is.p1) n1 <- length(p1)
+  if (is.p2) n2 <- length(p2)
+
   if (is.p2) {
 
     p2.l <- 1
     p2.n <- 1
 
     if (length(atb$lat) > 1) p2.l <- p2
-    if (length(atb$name) > 1) p2.l <- p2
+    if (length(atb$name) > 1) p2.n <- p2
   }
 
   if (is.p1) {
@@ -171,6 +186,11 @@
     if (is.p2) {
 
       # [a, b] given; give back time series b at times a
+
+      if (n1 == 1 & n2 > 1) {
+        # preserve matrix for single time step at multiple columns
+        dim(res) <- c(1, length(res))
+      }
 
       hist <- sprintf("Subset [%s, %s]",
                       deparse(substitute(p1)),
@@ -194,11 +214,16 @@
         # check if [a] oder [a, ] is requested from multivariate pTs
         
       } else if (is.array(res) |
-                 (length(res) == ncol(x) & length(p1) == 1)) {
+                 (length(res) == ncol(x) & n1 == 1)) {
 
         # [a, ] requested; give back time series at times a
 
         hist <- sprintf("Subset [%s, ]", deparse(substitute(p1)))
+
+        if (n1 == 1) {
+          # preserve matrix for single time step at multiple columns
+          dim(res) <- c(1, length(res))
+        }
 
         res <- pTs(res, stats::time(x)[p1], lat = atb$lat, lon = atb$lon,
                    name = atb$name, atb$history, date = FALSE)
@@ -223,6 +248,11 @@
     #[, b] given; give back time series b
 
     hist <- sprintf("Subset [, %s]", deparse(substitute(p2)))
+
+    if (nrow(x) == 1 & n2 > 1) {
+      # preserve matrix for single time step at multiple columns
+      dim(res) <- c(1, length(res))
+    }
 
     res <- pTs(res, stats::time(x),
                lat = atb$lat[p2.l], lon = atb$lon[p2.l],
