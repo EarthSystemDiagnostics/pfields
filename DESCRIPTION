@@ -1,6 +1,6 @@
 Package: pfields
 Title: An R Package to Analyse Gridded Field Data
-Version: 0.2.1.9000
+Version: 0.3.0.9000
 Author:
   Thomas Muench [aut, cre],
   Thomas Laepple [aut]
