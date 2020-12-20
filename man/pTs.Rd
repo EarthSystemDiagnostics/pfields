@@ -7,8 +7,16 @@
 Function copied from "proxytype.R" in paleolibary/src/.
 }
 \usage{
-pTs(data, time = NULL, lat = NA, lon = NA, name = "",
-  history = "", date = TRUE, kTol = 1/400)
+pTs(
+  data,
+  time = NULL,
+  lat = NA,
+  lon = NA,
+  name = "",
+  history = "",
+  date = TRUE,
+  kTol = 1/400
+)
 }
 \arguments{
 \item{data}{a vector, matrix or ts object to be converted. If missing, a

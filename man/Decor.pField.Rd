@@ -4,8 +4,17 @@
 \alias{Decor.pField}
 \title{Decorrelation of field}
 \usage{
-Decor.pField(field, lat1, lon1, lat2, lon2, return.scatter = FALSE,
-  verbose = FALSE, print.progress = NULL, ...)
+Decor.pField(
+  field,
+  lat1,
+  lon1,
+  lat2,
+  lon2,
+  return.scatter = FALSE,
+  verbose = FALSE,
+  print.progress = NULL,
+  ...
+)
 }
 \arguments{
 \item{field}{a \code{"pField"} object.}

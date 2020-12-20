@@ -28,7 +28,8 @@ x <- pTs(lat = -75, lon = 0, time = 1,
 GetHistory(x)
 }
 \seealso{
-Other history: \code{\link{AddHistory}}
+Other history: 
+\code{\link{AddHistory}()}
 }
 \author{
 Thomas Laepple

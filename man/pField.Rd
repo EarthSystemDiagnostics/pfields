@@ -7,8 +7,16 @@
 Function copied from "proxytype.R" in paleolibary/src/
 }
 \usage{
-pField(data = NULL, time = 1, lat = NA, lon = NA, name = "",
-  history = "", date = TRUE, kTol = 1/400)
+pField(
+  data = NULL,
+  time = 1,
+  lat = NA,
+  lon = NA,
+  name = "",
+  history = "",
+  date = TRUE,
+  kTol = 1/400
+)
 }
 \arguments{
 \item{data}{input data; can be \code{NULL}, a numeric vector or an array of

@@ -4,8 +4,7 @@
 \alias{pField2df}
 \title{Convert field to data frame}
 \usage{
-pField2df(data, lat.min = NULL, lat.max = NULL, lon.min = NULL,
-  lon.max = NULL)
+pField2df(data, lat.min = NULL, lat.max = NULL, lon.min = NULL, lon.max = NULL)
 }
 \arguments{
 \item{data}{a \code{"pField"} or \code{"pTs"} object with one timestep.}

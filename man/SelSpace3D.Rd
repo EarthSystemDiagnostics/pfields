@@ -5,8 +5,15 @@
 \alias{selspace.3D}
 \title{SelSpace3D}
 \usage{
-SelSpace3D(data, lat1, lon1, SBOX = 5, tolLon = 10, bNN = FALSE,
-  timeindexNA = 1)
+SelSpace3D(
+  data,
+  lat1,
+  lon1,
+  SBOX = 5,
+  tolLon = 10,
+  bNN = FALSE,
+  timeindexNA = 1
+)
 }
 \arguments{
 \item{data}{pField object}
