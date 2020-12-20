@@ -17,10 +17,9 @@ More specifically:
 remotes::install_github("EarthSystemDiagnostics/pfields")
 ```
 ## Dependencies
-**pfields** depends on the following CRAN package:
-* `geosphere`,
-
- which is installed upon installing **pfields**.
+**pfields** depends on the package
+[`geostools`](https://github.com/EarthSystemDiagnostics/geostools), which is
+installed from GitHub upon installing **pfields**.
 
 ## Functionality
 
