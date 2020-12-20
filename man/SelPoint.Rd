@@ -34,9 +34,10 @@ This is a function in development; the current method to find the nearest
 grid point is to minimise the root mean square deviation between the
 position vectors in spherical coordinates of the requested point and all
 observation points in the \code{"pField"} object, which is done by calling
-\code{\link{MinimizeSpherical}}. In the future, a different method may be
-implemented for this. Note that requested lat/lon values outside the range
-of grid points in \code{data} will be processed with a warning.
+\code{\link[geostools]{MinimizeSpherical}}. In the future, a different
+method may be implemented for this. Note that requested lat/lon values
+outside the range of grid points in \code{data} will be processed with a
+warning.
 }
 \examples{
 # Create some empty pField object
