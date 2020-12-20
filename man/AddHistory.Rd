@@ -43,7 +43,8 @@ x <- AddHistory(x, newhist = "Changed xyz.")
 GetHistory(x)
 }
 \seealso{
-Other history: \code{\link{GetHistory}}
+Other history: 
+\code{\link{GetHistory}()}
 }
 \author{
 Thomas Laepple

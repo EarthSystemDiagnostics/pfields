@@ -201,9 +201,10 @@ selspace.3D <- function(...) {
 ##' grid point is to minimise the root mean square deviation between the
 ##' position vectors in spherical coordinates of the requested point and all
 ##' observation points in the \code{"pField"} object, which is done by calling
-##' \code{\link{MinimizeSpherical}}. In the future, a different method may be
-##' implemented for this. Note that requested lat/lon values outside the range
-##' of grid points in \code{data} will be processed with a warning.
+##' \code{\link[geostools]{MinimizeSpherical}}. In the future, a different
+##' method may be implemented for this. Note that requested lat/lon values
+##' outside the range of grid points in \code{data} will be processed with a
+##' warning.
 ##' @param data a \code{"pField"} object.
 ##' @param lat the latitude of the requested point.
 ##' @param lon the longitude of the requested point.
@@ -230,134 +231,49 @@ selspace.3D <- function(...) {
 ##' @export
 SelPoint <- function(data, lat, lon, simplify = TRUE, verbose = FALSE) {
 
-    # 2D fields of data latitudes and longitudes
-    field.coord <- GetLatLonField(data, simplify = TRUE)
+  # 2D fields of data latitudes and longitudes
+  field.coord <- GetLatLonField(data, simplify = TRUE)
 
-    # Warn if target latitude or longitude is outside coordinate range in data
+  # Warn if target latitude or longitude is outside coordinate range in data
 
-    if (lat < min(field.coord[1, ]) | lat > max(field.coord[1, ])) {
-        warning("Requested latitude is outside range of data.")
-    }
-    if (lon < min(field.coord[2, ]) | lon > max(field.coord[2, ])) {
-        warning("Requested longitude is outside range of data.")
-    }
-
-    # Select data at the point of minimum deviation from requested target
-
-    i <- MinimizeSpherical(lat0 = lat, lon0 = lon,
-                           lat = field.coord[1, ],
-                           lon = field.coord[2, ])
-
-    lat.nn <- unname(field.coord[1, i])
-    lon.nn <- unname(field.coord[2, i])
-
-    if (verbose) {
-        message(
-            sprintf("requested: lat = %f, lon = %f;\nfound: lat = %f, lon = %f",
-                    lat, lon, lat.nn, lon.nn))
-    }
-
-    if (simplify) {
-        
-        res <- pTs(data = data[, i], time = stats::time(data),
-                   lat = lat.nn, lon = lon.nn,
-                   name = GetName(data), history = GetHistory(data),
-                   date = FALSE)
-    } else {
-        
-        res <- pField(data = data[, i], time = stats::time(data),
-                      lat = lat.nn, lon = lon.nn,
-                      name = GetName(data), history = GetHistory(data),
-                      date = FALSE)
-    }
-
-    res <- AddHistory(res, paste0("SelPoint: lat = ", lat,", lon = ", lon))
-
-    return(res)
-
-}
-
-##' Minimize difference between coordinates
-##'
-##' This function finds the position in a latitude/longitude field that is
-##' closest to a given target position by minimizing the root mean square
-##' deviation of their position vectors in spherical coordinates.
-##' @param lat0 a length-1 vector with the latitude [degree] of the target
-##' position.
-##' @param lon0 a length-1 vector with the longitude [degree] of the target
-##' position.
-##' @param lat numeric vector of latitudes [degree] from a field of coordinates
-##' for which the point closest to the target is to be determined.
-##' @param lon numeric vector of longitudes [degree] from a field of coordinates
-##' for which the point closest to the target is to be determined. Must have the
-##' same length as \code{lat}.
-##' @param return.coordinates logical; shall the actual coordinates of the
-##' position closest to the target be returned? Defaults to \code{FALSE}, which
-##' returns just the vector index of the closest position.
-##' @return per default, the index position in \code{lat} (or \code{lon}) of the
-##' position closest to the target; or the actual coordinates of this position
-##' as a length-2 numeric vector (for \code{return.coordinates = TRUE}).
-##' @author Thomas Münch
-##' @examples
-##' # some coordinates
-##' lat0 <- -75
-##' lon0 <- 0
-##' lat <- seq(-74, -80, -2)
-##' lon <- seq(-2, 7, 3)
-##'
-##' # get closest point to lat0/lon0 in degree
-##' MinimizeSpherical(lat0, lon0, lat, lon,
-##'                   return.coordinates = TRUE)
-##' @export
-MinimizeSpherical <- function(lat0, lon0, lat, lon,
-                              return.coordinates = FALSE) {
-
-  # Error checking
-
-  if (length(lat0) != length(lon0))
-    stop("'lat0' and 'lon0' must both have length 1.")
-
-  if (length(lat) != length(lon))
-    stop("'lat' and 'lon' must have equal length.")
-
-  n <- length(lat)
-
-  # Convert angles from degree to radian
-
-  x <- deg2rad(lat0)
-  y <- deg2rad(lon0)
-
-  xx <- deg2rad(lat)
-  yy <- deg2rad(lon)
-
-  # Convert input to vectors in spherical coordinates
-
-  target <- c(cos(x) * cos(y),
-              cos(x) * sin(y),
-              sin(x))
-
-  field.vectors <- rbind(cos(xx) * cos(yy),
-                         cos(xx) * sin(yy),
-                         sin(xx))
-
-  # Root mean square deviation between target and data position vectors
-
-  dev <- rep(NA, n)
-  for (i in 1 : n) {
-
-    dev[i] <- rmsd(field.vectors[, i], target)
+  if (lat < min(field.coord[1, ]) | lat > max(field.coord[1, ])) {
+    warning("Requested latitude is outside range of data.")
+  }
+  if (lon < min(field.coord[2, ]) | lon > max(field.coord[2, ])) {
+    warning("Requested longitude is outside range of data.")
   }
 
-  # Return index of the position vector with minimum deviation to target
+  # Select data at the point of minimum deviation from requested target
 
-  i <- which.min(dev)
+  i <- geostools::MinimizeSpherical(lat0 = lat, lon0 = lon,
+                                    lat = field.coord[1, ],
+                                    lon = field.coord[2, ])
 
-  if (return.coordinates) {
-    res <- c(lat = lat[i], lon = lon[i])
+  lat.nn <- unname(field.coord[1, i])
+  lon.nn <- unname(field.coord[2, i])
+
+  if (verbose) {
+    message(
+      sprintf("requested: lat = %f, lon = %f;\nfound: lat = %f, lon = %f",
+              lat, lon, lat.nn, lon.nn))
+  }
+
+  if (simplify) {
+
+    res <- pTs(data = data[, i], time = stats::time(data),
+               lat = lat.nn, lon = lon.nn,
+               name = GetName(data), history = GetHistory(data),
+               date = FALSE)
   } else {
-    res <- i
+
+    res <- pField(data = data[, i], time = stats::time(data),
+                  lat = lat.nn, lon = lon.nn,
+                  name = GetName(data), history = GetHistory(data),
+                  date = FALSE)
   }
+
+  res <- AddHistory(res, paste0("SelPoint: lat = ", lat,", lon = ", lon))
 
   return(res)
-}
 
+}

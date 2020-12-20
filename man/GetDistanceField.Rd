@@ -4,8 +4,15 @@
 \alias{GetDistanceField}
 \title{Calculate distance between grid points}
 \usage{
-GetDistanceField(field, latlon.field = NULL, lat, lon,
-  get.nearest = FALSE, index = NULL, verbose = FALSE)
+GetDistanceField(
+  field,
+  latlon.field = NULL,
+  lat,
+  lon,
+  get.nearest = FALSE,
+  index = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{field}{a \code{"pField"} object.}
