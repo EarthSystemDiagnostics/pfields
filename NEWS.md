@@ -1,15 +1,17 @@
 # pfields 0.3.2
 
 * `ApplyTime()` now correctly handles applied functions which yield more than
-  one time step for the result. New behaviour is tested.
+  one time step for the result. New behaviour is tested;
 * specification of a new fitting time axis for apply results with more than one
   time step is tricky to automate and thus has been coded such that it is to be
   supplied manually; omitting the new time axis now causes an error issueing an
-  informative message.
+  informative message;
 * the name of the function which is used in the apply step is now handled such
   that also on-the-fly function definitions supplied as argument to
   `ApplyTime()` and `ApplySpace()` are supported and produce nice strings for
-  the history attribute of the output.
+  the history attribute of the output;
+* the history attribute now also nicely includes optional arguments passed to
+  the applied function;
 * the ".9000" development suffix is omitted from now on.
 
 # pfields 0.3.1.9000

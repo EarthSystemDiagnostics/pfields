@@ -54,13 +54,16 @@ ApplySpace <- function(data, FUN, ...) {
     return(data[, index])
   }
 
+  # Parse history attribute
+
+  arg <- deparse(match.call()[-c(1, 2)])
+  nam <- trimws(gsub("\\s+", " ", paste(arg, collapse = "")))
+  hist <- sprintf("ApplySpace: %s", nam)
+
   # Apply across space
 
   ts <- apply(data[, index], 1, FUN, ...)
   attr(ts, "history") <- GetHistory(data)
-  nam <- trimws(
-    gsub("\\s+", " ", paste(deparse(substitute(FUN)), collapse = "")))
-  hist <- sprintf("ApplySpace: %s", nam)
   res <- pTs(data = ts, time = stats::time(data),
              name = GetName(data), history = hist)
 
@@ -117,6 +120,13 @@ ApplyTime <- function(data, FUN, newtime = NULL, ...) {
     stop("Cannot apply across time: input has only one temporal dimension.")
   }
 
+  # Parse history attribute
+
+  if (is.null(newtime)) {argpos <- 1 : 2} else {argpos <- c(1, 2, 4)}
+  arg <- deparse(match.call()[-argpos])
+  nam <- trimws(gsub("\\s+", " ", paste(arg, collapse = "")))
+  hist <- sprintf("ApplyTime: %s", nam)
+
   # Apply across time
 
   field <- apply(data, 2, FUN, ...)
@@ -135,10 +145,6 @@ ApplyTime <- function(data, FUN, newtime = NULL, ...) {
   }
 
   # Shape into field
-
-  nam <- trimws(
-    gsub("\\s+", " ", paste(deparse(substitute(FUN)), collapse = "")))
-  hist <- sprintf("ApplyTime: %s", nam)
 
   if (is.pField(data)) {
 
