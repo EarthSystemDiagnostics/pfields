@@ -66,6 +66,11 @@ test_that("ApplyTime works.", {
   field <- pField(input, time = 1, lat = 1, lon = 1 : 100)
   expect_error(output <- ApplyTime(field, sd))
 
+  # result has >1 time step but no new time axis supplied
+  field <- pField(1, time = 1 : 100, lat = 1, lon = 1 : 5)
+  expect_error(output <- ApplyTime(field, range))
+  expect_error(output <- ApplyTime(field, range, newtime = c(1, 2)), NA)
+
   # Test output
 
   # using deprecated function name

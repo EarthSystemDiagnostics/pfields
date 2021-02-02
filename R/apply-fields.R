@@ -113,16 +113,24 @@ ApplyTime <- function(data, FUN, newtime = NULL, ...) {
     stop("Cannot apply across time: input has only one temporal dimension.")
   }
 
-  # Set output time step
-
-  if (is.null(newtime)) {
-    newtime <- mean(stats::time(data))
-  }
-
   # Apply across time
 
   field <- apply(data, 2, FUN, ...)
   attr(field, "history") <- GetHistory(data)
+
+  # Set output time step
+
+  if (is.null(newtime)) {
+
+    if (!is.null(dim(field))) {
+      stop("ApplyTime yields result with more than one time step. ",
+         "Need to provide a new time axis.", call. = FALSE)
+    }
+
+    newtime <- mean(stats::time(data))
+  }
+
+  # Shape into field
 
   if (is.pField(data)) {
 
