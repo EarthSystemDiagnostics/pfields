@@ -1,4 +1,4 @@
-# pfields 0.3.2.9000
+# pfields 0.3.2
 
 * `ApplyTime()` now correctly handles applied functions which yield more than
   one time step for the result. New behaviour is tested.
@@ -10,6 +10,7 @@
   that also on-the-fly function definitions supplied as argument to
   `ApplyTime()` and `ApplySpace()` are supported and produce nice strings for
   the history attribute of the output.
+* the ".9000" development suffix is omitted from now on.
 
 # pfields 0.3.1.9000
 
