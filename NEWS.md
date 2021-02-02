@@ -12,6 +12,8 @@
   the history attribute of the output;
 * the history attribute now also nicely includes optional arguments passed to
   the applied function;
+* deprecated function name `latlonField()` is exported to be consistent with
+  other deprecated function names;
 * the ".9000" development suffix is omitted from now on.
 
 # pfields 0.3.1.9000

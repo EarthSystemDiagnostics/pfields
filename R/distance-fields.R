@@ -25,7 +25,8 @@
 ##' latlons <- GetLatLonField(field)
 ##' latlons$lat2d
 ##' latlons$lon2d
-##' @export
+##' @aliases GetLatLonField latlonField
+##' @export GetLatLonField latlonField
 GetLatLonField <- function(data, simplify = FALSE) {
 
   lat <- GetLat(data)
