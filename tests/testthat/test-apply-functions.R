@@ -66,6 +66,11 @@ test_that("ApplyTime works.", {
   field <- pField(input, time = 1, lat = 1, lon = 1 : 100)
   expect_error(output <- ApplyTime(field, sd))
 
+  # result has >1 time step but no new time axis supplied
+  field <- pField(1, time = 1 : 100, lat = 1, lon = 1 : 5)
+  expect_error(output <- ApplyTime(field, range))
+  expect_error(output <- ApplyTime(field, range, newtime = c(1, 2)), NA)
+
   # Test output
 
   # using deprecated function name
@@ -78,12 +83,28 @@ test_that("ApplyTime works.", {
   expect_true(is.pField(output))
   expect_equal(as.numeric(output), rep(0, 5))
 
+  field <- pField(1 : 6, time = 1 : 2, lat = 1, lon = 1 : 3)
+  output <- ApplyTime(field, mean)
+  expect_equal(as.numeric(output), c(2.5, 3.5, 4.5))
+
   # input pTs
   input <- matrix(rep(0, 100), nrow = 20)
   field <- pTs(input, time = 1 : 20)
   output <- ApplyTime(field, sd)
   expect_true(is.pTs(output))
   expect_equal(as.numeric(output), rep(0, 5))
+
+  # result has more than one time step
+  field <- pField(1 : 50, time = 1 : 10, lat = 1, lon = 1 : 5)
+  output <- ApplyTime(field, FUN = function(x) {x}, newtime = time(field))
+  attr(output, "history") <- NULL
+  expect_equal(field, output)
+
+  input <- matrix(1 : 20, nrow = 10)
+  field <- pTs(input, time = 1 : 10)
+  output <- ApplyTime(field, FUN = function(x) {x}, newtime = time(field))
+  attr(output, "history") <- NULL
+  expect_equal(field, output)
 
 })
 

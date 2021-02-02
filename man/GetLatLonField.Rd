@@ -2,6 +2,7 @@
 % Please edit documentation in R/distance-fields.R
 \name{GetLatLonField}
 \alias{GetLatLonField}
+\alias{latlonField}
 \title{Latitude and longitude fields}
 \source{
 Function copied from "basis.R" in paleolibary/src/.
