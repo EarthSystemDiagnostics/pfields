@@ -75,14 +75,17 @@ applyspace <- function(...) {
 ##' Apply a function across time
 ##'
 ##' Apply a function across the temporal dimension of a \code{"pField"} or
-##' \code{"pTs"} object by using \code{apply} on the columns of the object. The
-##' result of this gives a \code{"pField"} or \code{"pTs"} object with only one
-##' time step.
+##' \code{"pTs"} object by using \code{apply} on the columns of the
+##' object. Depending in the output of the applied function, this gives a
+##' \code{"pField"} or \code{"pTs"} object with only one, or with several time
+##' steps.
 ##' @param data a \code{"pField"} or \code{"pTs"} object.
 ##' @param FUN the function to be applied.
-##' @param newtime Specify the observation time point of the result. For
-##' \code{NULL} (the default), the average of the time points in \code{data} is
-##' used.
+##' @param newtime the observation time point(s) of the result. For \code{NULL}
+##' (the default), the average of the time points in \code{data} is used,
+##' assuming the applied function yields an aggregated result. If the result of
+##' \code{FUN} yields more than one time step, you need to provide the
+##' respective new time axis here.
 ##' @param ... further arguments passed on to \code{FUN}.
 ##' @return a \code{"pField"} or \code{"pTs"} object with the results of the
 ##' function applied.
@@ -139,7 +142,7 @@ ApplyTime <- function(data, FUN, newtime = NULL, ...) {
 
   if (is.pField(data)) {
 
-    res <- pField(data = field, time = newtime,
+    res <- pField(data = t(field), time = newtime,
                   lat = GetLat(data), lon = GetLon(data),
                   name = GetName(data), history = hist)
   } else {

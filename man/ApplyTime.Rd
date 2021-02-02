@@ -15,9 +15,11 @@ ApplyTime(data, FUN, newtime = NULL, ...)
 
 \item{FUN}{the function to be applied.}
 
-\item{newtime}{Specify the observation time point of the result. For
-\code{NULL} (the default), the average of the time points in \code{data} is
-used.}
+\item{newtime}{the observation time point(s) of the result. For \code{NULL}
+(the default), the average of the time points in \code{data} is used,
+assuming the applied function yields an aggregated result. If the result of
+\code{FUN} yields more than one time step, you need to provide the
+respective new time axis here.}
 
 \item{...}{further arguments passed on to \code{FUN}.}
 }
@@ -27,9 +29,10 @@ function applied.
 }
 \description{
 Apply a function across the temporal dimension of a \code{"pField"} or
-\code{"pTs"} object by using \code{apply} on the columns of the object. The
-result of this gives a \code{"pField"} or \code{"pTs"} object with only one
-time step.
+\code{"pTs"} object by using \code{apply} on the columns of the
+object. Depending in the output of the applied function, this gives a
+\code{"pField"} or \code{"pTs"} object with only one, or with several time
+steps.
 }
 \examples{
 x <- pField(data = array(rnorm(10 * 10 * 100), dim = c(10, 10, 100)),
