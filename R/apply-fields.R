@@ -58,10 +58,11 @@ ApplySpace <- function(data, FUN, ...) {
 
   ts <- apply(data[, index], 1, FUN, ...)
   attr(ts, "history") <- GetHistory(data)
+  nam <- trimws(
+    gsub("\\s+", " ", paste(deparse(substitute(FUN)), collapse = "")))
+  hist <- sprintf("ApplySpace: %s", nam)
   res <- pTs(data = ts, time = stats::time(data),
-             name = GetName(data),
-             history = sprintf("ApplySpace: %s",
-                               deparse(substitute(FUN))))
+             name = GetName(data), history = hist)
 
   return(res)
 }
@@ -132,13 +133,15 @@ ApplyTime <- function(data, FUN, newtime = NULL, ...) {
 
   # Shape into field
 
+  nam <- trimws(
+    gsub("\\s+", " ", paste(deparse(substitute(FUN)), collapse = "")))
+  hist <- sprintf("ApplyTime: %s", nam)
+
   if (is.pField(data)) {
 
     res <- pField(data = field, time = newtime,
                   lat = GetLat(data), lon = GetLon(data),
-                  name = GetName(data),
-                  history = sprintf("ApplyTime: %s",
-                                    deparse(substitute(FUN))))
+                  name = GetName(data), history = hist)
   } else {
 
     if (length(newtime) == 1) {
@@ -147,9 +150,7 @@ ApplyTime <- function(data, FUN, newtime = NULL, ...) {
 
     res <- pTs(data = field, time = newtime,
                lat = GetLat(data), lon = GetLon(data),
-               name = GetName(data),
-               history = sprintf("ApplyTime: %s",
-                                 deparse(substitute(FUN))))
+               name = GetName(data), history = hist)
   }
   
   return(res)
