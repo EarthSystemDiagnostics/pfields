@@ -79,15 +79,16 @@ applyspace <- function(...) {
 ##'
 ##' Apply a function across the temporal dimension of a \code{"pField"} or
 ##' \code{"pTs"} object by using \code{apply} on the columns of the
-##' object. Depending in the output of the applied function, this gives a
+##' object. Depending on the output of the applied function, this gives a
 ##' \code{"pField"} or \code{"pTs"} object with only one, or with several time
 ##' steps.
 ##' @param data a \code{"pField"} or \code{"pTs"} object.
 ##' @param FUN the function to be applied.
 ##' @param newtime the observation time point(s) of the result. For \code{NULL}
 ##' (the default), the average of the time points in \code{data} is used,
-##' assuming the applied function yields an aggregated result. If the result of
-##' \code{FUN} yields more than one time step, you need to provide the
+##' if the applied function yields an aggregated result (i.e. one time step),
+##' and the original time points in \code{data} if the result has as many time
+##' steps as the input data. For other cases, you need to provide the
 ##' respective new time axis here.
 ##' @param ... further arguments passed on to \code{FUN}.
 ##' @return a \code{"pField"} or \code{"pTs"} object with the results of the
@@ -102,6 +103,9 @@ applyspace <- function(...) {
 ##' # subset incompletely to create a pTs object
 ##' x.pts <- x[, 1 : 15]
 ##' y.pts <- ApplyTime(x.pts, mean) # is the same as y[, 1 : 15]
+##'
+##' # you need to supply a new time axis e.g. for use cases such as
+##' y <- ApplyTime(x, range, newtime = c(1, 2))
 ##' @aliases applytime ApplyTime
 ##' @export applytime ApplyTime
 ApplyTime <- function(data, FUN, newtime = NULL, ...) {
@@ -134,14 +138,25 @@ ApplyTime <- function(data, FUN, newtime = NULL, ...) {
 
   # Set output time step
 
+  nt <- ifelse(is.null(dim(field)), 1, nrow(field))
+
   if (is.null(newtime)) {
 
-    if (!is.null(dim(field))) {
-      stop("ApplyTime yields result with more than one time step. ",
-         "Need to provide a new time axis.", call. = FALSE)
+    if (nt == 1) {
+      newtime <- mean(stats::time(data))
+    } else if (nt == nrow(data)) {
+      newtime <- stats::time(data)
+    } else {
+      stop("Need to provide a new time axis for result of apply operation.",
+           call. = FALSE)
     }
 
-    newtime <- mean(stats::time(data))
+  } else {
+
+    if (length(newtime) != nt) {
+      stop("Provided time axis does not match result of apply operation.",
+           call. = FALSE)
+    }
   }
 
   # Shape into field
