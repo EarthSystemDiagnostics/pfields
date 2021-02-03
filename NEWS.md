@@ -1,3 +1,7 @@
+# pfields 0.3.3
+
+* `ApplyTime()`: improved setting and error checking of output time step.
+
 # pfields 0.3.2
 
 * `ApplyTime()` now correctly handles applied functions which yield more than

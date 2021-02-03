@@ -17,8 +17,9 @@ ApplyTime(data, FUN, newtime = NULL, ...)
 
 \item{newtime}{the observation time point(s) of the result. For \code{NULL}
 (the default), the average of the time points in \code{data} is used,
-assuming the applied function yields an aggregated result. If the result of
-\code{FUN} yields more than one time step, you need to provide the
+if the applied function yields an aggregated result (i.e. one time step),
+and the original time points in \code{data} if the result has as many time
+steps as the input data. For other cases, you need to provide the
 respective new time axis here.}
 
 \item{...}{further arguments passed on to \code{FUN}.}
@@ -30,7 +31,7 @@ function applied.
 \description{
 Apply a function across the temporal dimension of a \code{"pField"} or
 \code{"pTs"} object by using \code{apply} on the columns of the
-object. Depending in the output of the applied function, this gives a
+object. Depending on the output of the applied function, this gives a
 \code{"pField"} or \code{"pTs"} object with only one, or with several time
 steps.
 }
@@ -42,6 +43,9 @@ y <- ApplyTime(x, mean)
 # subset incompletely to create a pTs object
 x.pts <- x[, 1 : 15]
 y.pts <- ApplyTime(x.pts, mean) # is the same as y[, 1 : 15]
+
+# you need to supply a new time axis e.g. for use cases such as
+y <- ApplyTime(x, range, newtime = c(1, 2))
 }
 \author{
 Thomas Laepple
