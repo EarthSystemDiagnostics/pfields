@@ -1,3 +1,8 @@
+# pfields 0.3.4
+
+* Minor bug fix to `pField()` and `pTs()` functions to ensure numeric
+  time difference when supplied time vectors are not numeric.
+
 # pfields 0.3.3
 
 * `ApplyTime()`: improved setting and error checking of output time step.
